@@ -1,18 +1,16 @@
-# Node
 node_modules/
-
-# Environment variables
 .env
+.env.*
+!.env.example
 
-# Strapi internal / runtime
-.strapi/
-.strapi-updater.json
-.tmp/
 dist/
-database/
-
-# Caches
 .cache/
+.tmp/
+build/
 
-# OS
+database/
+*.sqlite
+*.sqlite3
+
 .DS_Store
+Thumbs.db
