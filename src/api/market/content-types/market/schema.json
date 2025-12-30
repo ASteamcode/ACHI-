@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "markets",
+  "info": {
+    "singularName": "market",
+    "pluralName": "markets",
+    "displayName": "Market"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Name": {
+      "type": "string"
+    },
+    "Code": {
+      "type": "uid",
+      "targetField": "Name"
+    },
+    "DefaultLocale": {
+      "type": "string"
+    },
+    "Domain": {
+      "type": "string"
+    },
+    "isActive": {
+      "type": "boolean"
+    },
+    "pages": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::page.page",
+      "mappedBy": "market"
+    }
+  }
+}

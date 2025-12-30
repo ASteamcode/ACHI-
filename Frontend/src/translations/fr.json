@@ -1,0 +1,129 @@
+{
+    "header":{
+        "Lebanon" : "Liban"
+    },
+    "langDropwn" : {
+        "arabic" : "Arabe",
+        "english" : "Anglais",
+        "french" : "Français"
+    },
+    "nav": {
+        "home": "Accueil",
+        "about": "Qui sommes-nous",
+        "contact": "Contactez-nous",
+        "services": "Nos services",
+        "clients": "Nos clients",
+        "projects": "Projets",
+        "gallery": "Galerie",
+        "marketplace" : "Place de marché",
+        "openTime" : "We are open from Monday to Saturday from 7:30 to 6pm",
+        "copyright": "VAT number: 17231971007 © 2024 Achi Ponteggi. All rights reserved"
+    },
+    "banner1" : {
+        "title" : "SERVICES D'ÉCHAFAUDAGE\n ET D'ÉTAYAGE",
+        "subtitle" : "Services professionnels d'échafaudage depuis 1993.",
+        "button" : "ENVOYEZ-NOUS VOTRE DEMANDE VIA WHATSAPP."
+    },
+    "banner2" : {
+        "title" : "NOUS SOMMES PRÊTS POUR VOTRE\n PROJET DANS TOUT LE LIBAN",
+        "subtitle" : "Service complet d’installation et location d'échafaudage depuis 1993.",
+        "button" : "ENVOYEZ-NOUS VOTRE DEMANDE VIA WHATSAPP."
+    },
+    "banner3" : {
+        "title" : "NOUS VENDONS DES ÉQUIPEMENTS\n NEUFS ET D'OCCASION",
+        "subtitle" : "Fourniture Equipements de construction neufs et d'occasion.",
+        "button" : "ENVOYEZ-NOUS VOTRE DEMANDE VIA WHATSAPP."
+    },
+    "service" : {
+        "title" : "Nos services",
+        "firstService" : "Pose et location d'échafaudages pour Façades",
+        "secondService" : "Installation et location d'échafaudages suspendus",
+        "thirdService" : "Services de systèmes d'étaiement",
+        "fourthService" : "Services d'échafaudages intérieurs",
+        "fifthService" : "Services de structures à haute capacité",
+        "sixthService" : "Etaies de construction",
+        "seventhService" : "Etudes d'échafaudages",
+        "eighthService" : "Services numériques",
+        "ninthService" : "Main-d'œuvre spécialisée",
+        "tenthService" : "Échafaudages de grande hauteur",
+        "eleventhService" : "Échafaudages circulaires et en dôme",
+        "twelfthService" : "Échafaudages pour événements",
+        "thirteenthService" : "Échafaudages industriels",
+        "fourteenthService" : "Échafaudages de toiture",
+        "fifteenthService" : "Échafaudages suspendus mobiles (pour ponts)",
+        "sixteenthService" : "Escaliers d'accès aux échafaudages",
+        "seventeenthService" : "Plates-formes de chargement et déchargement",
+        "contactBtn" : "Contactez-nous",
+        "title2" : "Initiative des professionnels",
+        "title2br" : "Initiative des\n professionnels"
+    },
+    "aboutUs": {
+        "titleMultiLine": "30+ ANS\nD'EXPÉRIENCE EN\nÉCHAFAUDAGE",
+        "title": "30+ ANS D'EXPÉRIENCE EN ÉCHAFAUDAGE",
+        "description": "Depuis sa fondation en 1993 par l'ingénieur Barbar Achi, Achi Échafaudage est devenu un fournisseur de renom spécialisé dans les services d'échafaudage et de coffrage au Liban. Notre équipe professionnelle est fière de construire une solide réputation basée sur la confiance, en fournissant des structures d'échafaudage fiables et de haute qualité pour divers projets, tels que les centres commerciaux, les tours, les immeubles résidentiels et les universités.",
+        "additionalText": "Contactez-nous ou envoyez-nous votre demande via WhatsApp pour une réponse rapide.",
+        "button": "En savoir plus sur nous"
+    },
+
+    "clients" : {
+        "title" : "Nos clients"
+    },
+    "vision" : {
+        "title" : "NOTRE VISION",
+        "description" : "Chez Achi Scaffolding, nous traçons une voie visionnaire vers un avenir où les échafaudages ne sont pas simplement une nécessité structurelle ; c'est une incarnation de l'innovation, d'une sécurité inégalée et d'un progrès durable, définissant l'infrastructure de demain.",
+        "btnText" : "investissez avec nous"
+    },
+    "mission" : {
+        "title" : "LA MISSION",
+        "description" : "Nous nous spécialisons dans les services d'échafaudage complets, de la location à l'installation, et vendons et exportons une gamme variée d'équipements de construction neufs et occasion au Moyen-Orient et en Afrique.",
+        "btnText" : "Parlons maintenant"
+    },
+    "values" : {
+        "title" : "NOS VALEURS",
+        "firstValueTitle" : "Sécurité d'abord",
+        "firstValueDescription" : "Assurer un environnement sûr pour nos travailleurs et nos clients est primordial.",
+        "secondValueTitle" : "Engagement envers la qualité",
+        "secondValueDescription" : "Nous ne livrons que la meilleure qualité dans tous nos projets.",
+        "thirdValueTitle" : "Innovation",
+        "thirdValueDescription" : "Nous adoptons les dernières technologies et méthodologies de l'industrie de l'échafaudage.",
+        "fourthValueTitle" : "Durabilité",
+        "fourthValueDescription" : "Nous privilégions les pratiques respectueuses de l'environnement pour un avenir meilleur.",
+        "fifthValueTitle" : "Partenariat",
+        "fifthValueDescription" : "Établir des relations solides et durables avec nos clients et fournisseurs.",
+        "sixthValueTitle" : "Intégrité",
+        "sixthValueDescription" : "Nous fonctionnons avec transparence, honnêteté et standards éthiques."
+    },
+    "testimonials" : {
+        "title" : "Ce que nos clients disent de nous"
+    },
+    "contactForm" : {
+        "titleDesktop" : "Bien sûr! Comment puis-je vous aider aujourd'hui?",
+        "titleMobile" : "Commencez votre projet maintenant",
+        "btnText" : "Envoyer"
+    },
+    "footer" : {
+        "ourcontacts" : "Our contacts",
+        "contactus": "Contact us",
+        "followus": "Suivez-nous"
+    },
+    "inputs" : {
+        "emailPlaceholder" : "Email",
+        "namePlaceholder" : "Nom",
+        "phonePlaceholder" : "Téléphone",
+        "messagePlaceholder" : "Écris quelque chose..."
+    },
+    "whychoseus" : {
+        "sectionTitle" : "Pourquoi nous choisir",
+        "firstCardtitle" : "Expertise et Expérience",
+        "firstCardDescription" : "Avec une équipe de professionnels hautement qualifiés et des années d'expérience dans le secteur des échafaudages, nous apportons une richesse d'expertise à chaque projet. Nous avons réussi à mener à bien des projets complexes et exigeants, obtenant une réputation pour la qualité de notre travail.",
+        "secondCardtitle" : "Communication et service client exceptionnels",
+        "secondCardDescription" : "Chez Achi Scaffolding, une communication et un service client exceptionnels sont au cœur de nos valeurs. Nous croyons en la construction de partenariats solides avec nos clients, et notre équipe est dédiée à comprendre vos besoins.",
+        "thirdCardTitle" : "Inventaire vaste et diversifié",
+        "thirdCardDescription" : "Nous nous distinguons grâce à notre vaste et diversifié inventaire d'équipements et de matériaux d'échafaudage. Que votre projet soit grand ou petit, nous avons les ressources pour répondre à vos exigences spécifiques.",
+        "fourthCardTitle" : "Assistance Immédiate",
+        "fourthCardDescription" : "La réussite de votre projet est notre priorité absolue. Lorsque vous travaillez avec nous, vous pouvez compter sur une assistance immédiate à tout moment. Que ce soit une question, une demande urgente ou un support sur site, notre équipe réactive est toujours prête à vous aider rapidement. Assistance Immédiate.",
+        "fifthCardTitle" : "Équipe d'ingénierie interne",
+        "fifthCardDescription" : "Achi Scaffolding est fier d'avoir une équipe d'ingénierie interne capable de fournir des perspectives précieuses, de concevoir des solutions sur mesure et de garantir l'intégrité structurelle et la sécurité de votre échafaudage. Notre expertise en ingénierie ajoute une couche supplémentaire de fiabilité et de confiance à votre projet."
+    }
+}
+

@@ -1,0 +1,128 @@
+{
+    "header":{
+        "Lebanon" : "Lebanon"
+    },
+    "langDropwn" : {
+        "arabic" : "Arabic",
+        "english" : "English",
+        "french" : "French"
+    },
+    "nav": {
+        "home": "Home",
+        "about": "About us",
+        "contact": "Contact Us",
+        "services": "Services",
+        "clients": "Clients",
+        "projects": "Projects",
+        "gallery": "Gallery",
+        "marketplace" : "Marketplace",
+        "openTime" : "We are open from Monday to Saturday from 7:30 to 6pm",
+        "copyright": "VAT number: 17231971007 © 2024 Achi Ponteggi. All rights reserved"
+    },
+    "banner1" : {
+        "title" : "Scaffolding & \n shoring services",
+        "subtitle" : "Professional scaffolding services since 1993.",
+        "button" : "send us your enquiry over whatsapp"
+    },
+    "banner2" : {
+        "title" : "we are ready for your \n project in all lebanon",
+        "subtitle" : "Full-service scaffolding contracting since 1993. ",
+        "button" : "send us your enquiry over whatsapp"
+    },
+    "banner3" : {
+        "title" : "We sell used &\n new equipement",
+        "subtitle" : "Supply of New and Used construction equipment",
+        "button" : "send us your enquiry over whatsapp"
+    },
+    "service" : {
+        "title" : "Our Services",
+        "firstService" : "Installation and rental of scaffolding for Facades",
+        "secondService" : "Installation and rental of Suspended scaffolding",
+        "thirdService" : "Propping and shoring systems",
+        "fourthService" : "Installation and rental of scaffolding for indoor spaces",
+        "fifthService" : "Installation and rental of high capacity structures",
+        "sixthService" : "Adjustable props rental & Sales",
+        "seventhService" : "Scaffolding design",
+        "eighthService" : "Digital services",
+        "ninthService" : "Specialized Laborforce",
+        "tenthService" : "High-Rise Scaffolding",
+        "eleventhService" : "Circular & Dome Scaffolding",
+        "twelfthService" : "Scaffolding for Events",
+        "thirteenthService" : "Industrial Scaffolding",
+        "fourteenthService" : "Roof Scaffolding",
+        "fifteenthService" : "Mobile Suspended Scaffolding (for Bridges)",
+        "sixteenthService" : "Scaffolding Access Stairs",
+        "seventeenthService" : "Unloading & Loading Platforms",
+        "contactBtn" : "Contact us",
+        "title2" : "Professionals initiative",
+        "title2br" : "Professionals \ninitiative"
+    },
+        "aboutUs": {
+        "titleMultiLine": "30+ years of SCAFFOLDING\n experience",
+        "title": "30+ years of SCAFFOLDING experience",
+        "description": "Since 1993, Achi Scaffolding has evolved into a reputable provider of expert scaffolding and formwork services in Lebanon. Our team builds trust by delivering reliable and high-quality scaffolds.\n \n",
+        "button": "Learn more about us"
+    },
+
+    "clients" : {
+        "title" : "Our Clients"
+    },
+    "vision" : {
+        "title" : "Our vision",
+        "description" : "At Achi Scaffolding, we're charting a visionary course towards a future where scaffolding isn't merely a structural necessity; it's an embodiment of innovation, unparalleled safety, and sustainable advancement, defining the infrastructure of tomorrow.",
+        "btnText" : "invest with us"
+    },
+    "mission" : {
+        "title" : "the mission",
+        "description" : "We specialize in comprehensive scaffolding services, from rental to installation,\n and sell and export a diverse range of new and used construction equipment in the Middle East and Africa.",
+        "btnText" : "let's talk"
+    },
+    "values" : {
+        "title" : "Values",
+        "firstValueTitle" : "Safety First",
+        "firstValueDescription" : "Ensuring a safe environment for our workers and clients is paramount.",
+        "secondValueTitle" : "Quality Commitment",
+        "secondValueDescription" : "We deliver only the highest quality in all our projects.",
+        "thirdValueTitle" : "Innovation",
+        "thirdValueDescription" : "We embrace the latest technologies and methodologies in the scaffolding industry.",
+        "fourthValueTitle" : "Sustainability",
+        "fourthValueDescription" : "We prioritize eco-friendly practices for a better future",
+        "fifthValueTitle" : "Partnership",
+        "fifthValueDescription" : "Building strong and lasting relationships with our clients and suppliers.",
+        "sixthValueTitle" : "Integrity",
+        "sixthValueDescription" : "We operate with transparency, honesty, and ethical standards."
+    },
+    "testimonials" : {
+        "title" : "What our clients say about us"
+    },
+    "contactForm" : {
+        "titleDesktop" : "Let’s talk!",
+        "titleMobile" : "Start your project now",
+        "btnText" : "Send"
+    },
+    "footer" : {
+        "ourcontacts" : "Our contacts",
+        "contactus": "Contact us",
+        "followus": "Follow us"
+    },
+    "inputs" : {
+        "emailPlaceholder" : "Email",
+        "namePlaceholder" : "Name",
+        "phonePlaceholder" : "Phone",
+        "messagePlaceholder" : "Write something..."
+    },
+    "whychoseus" : {
+        "sectionTitle" : "Why choose us",
+        "firstCardtitle" : "Experience and expertise",
+        "firstCardDescription" : "With a team of highly skilled professionals and years of experience in the scaffolding industry  ,  we bring a wealth of expertise to every project. We've successfully completed complex and challenging projects, earning a reputation for delivering quality workmanship.",
+        "secondCardtitle" : "Exceptional Client Communication and Service",
+        "secondCardDescription" : "At Achi Scaffolding, exceptional client communication and service are at the core of our values. We believe in building strong partnerships with our clients, and our team is dedicated to understanding your needs.",
+        "thirdCardTitle" : "Extensive and Diverse Inventory",
+        "thirdCardDescription" : "We stand out because of our vast and diverse inventory of scaffolding equipment and materials. Whether your project is large or small, we have the resources to meet your specific requirements.",
+        "fourthCardTitle" : "Immediate Assistance",
+        "fourthCardDescription" : "Your project's success is our top priority. When you work with us, you can count on immediate assistance whenever you need it. Whether it's a question, an urgent request, or on-site support, our responsive team  of scaffolding expert is always ready to assist you promptly.",
+        "fifthCardTitle" : "In-House Engineering Team",
+        "fifthCardDescription" : "Achi Scaffolding is proud to have an in-house engineering team that can provide valuable insights, design custom solutions, and ensure the structural integrity and safety of your scaffolding. Our engineering expertise adds an extra layer of reliability and confidence to your project."
+    }
+}
+

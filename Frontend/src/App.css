@@ -1,0 +1,616 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@200;400;600&family=Rubik:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;300;400;500;600;700&family=Saira+Stencil+One&family=Saira:ital,wght@0,200;1,100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200;0,6..12,300;0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700;0,6..12,800;0,6..12,900;0,6..12,1000;1,6..12,200;1,6..12,300;1,6..12,400;1,6..12,500;1,6..12,600;1,6..12,700;1,6..12,800;1,6..12,900;1,6..12,1000&display=swap');
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css);
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@font-face {
+  font-family: 'Spartan';
+  src: local('Spartan'), url(../public/fonts/Spartan-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Spartan';
+  font-weight: 100;
+  src: local('Spartan'), url(../public/fonts/Spartan-Thin.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Spartan';
+  font-weight: 200;
+  src: local('Spartan'), url(../public/fonts/Spartan-ExtraLight.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Spartan';
+  font-weight: 300;
+  src: local('Spartan'), url(../public/fonts/Spartan-Light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Spartan';
+  font-weight: 400;
+  src: local('Spartan'), url(../public/fonts/Spartan-Medium.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Spartan';
+  font-weight: 500;
+  src: local('Spartan'), url(../public/fonts/Spartan-SemiBold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Spartan';
+  font-weight: 600;
+  src: local('Spartan'), url(../public/fonts/Spartan-Bold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Spartan';
+  font-weight: 700;
+  src: local('Spartan'), url(../public/fonts/Spartan-ExtraBold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Spartan';
+  font-weight: 900;
+  src: local('Spartan'), url(../public/fonts/Spartan-Black.ttf) format('truetype');
+}
+
+
+#root {
+  white-space: pre-line;
+}
+
+.App {
+  font-family: 'Rubik', sans-serif;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+#service .slick-slide {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.slick-arrow::before {
+  content: '' !important;
+}
+
+[dir="rtl"] .slick-next {
+  left: auto !important;
+}
+
+#service .slick-prev, #service .slick-next {
+  width: 40px !important;
+  top: 55px !important;
+}
+
+#service .slick-prev {
+  left: 25% !important;
+  z-index: 9999;
+}
+
+#service .slick-next {
+  right: 25% !important;
+}
+
+#clients .slick-prev, #clients .slick-next {
+  width: 40px !important;
+  top: 45% !important;
+  z-index: 9999;
+}
+
+#clients .slick-prev {
+  left: 15px !important;
+  z-index: 9999;
+}
+
+#clients .slick-next {
+  right: 15px !important;
+  z-index: 9999;
+}
+
+
+#service .slick-disabled img {
+  opacity: 0.5;
+}
+
+
+#hero .slick-next {
+  right: 10px !important;
+}
+
+#hero .slick-prev, #hero .slick-next {
+  width: 40px !important;
+  height: 40px !important;
+  z-index: 99;
+}
+
+#hero .slick-prev {
+  left: 10px !important;
+}
+
+#hero .slick-dots {
+  bottom: 40px !important;
+}
+
+#hero .slick-dots li button::before {
+  font-size: 13px !important;
+  opacity: 0.7;
+  color: #ccc !important;
+}
+
+#hero .slick-dots li.slick-active button::before {
+  color: #3366a7 !important;
+}
+#hero .slick-disabled {
+  display: none !important;
+}
+@media screen and (max-width: 767px) {
+  #hero .slick-prev, #hero .slick-next {
+    display: none !important;
+  }
+}
+
+.glider-prev , .glider-next {
+  background: #28509E !important;
+  padding: 5px !important;
+  border-radius: 15px;
+  color: white !important;
+  opacity: 0.6 !important;
+}
+
+.react-images__view-image.react-images__view-image--isModal {
+  margin: 0 auto !important;
+}
+
+.glider-prev:hover , .glider-next:hover {
+  opacity: 1 !important;
+}
+
+
+.glider-next.disabled, .glider-prev.disabled {
+  display: none;
+}
+
+.glider-prev {
+  left: 10px !important;
+}
+
+.glider-next {
+  right: 10px !important;
+}
+
+.glider-dot.active {
+  background: #3366A7 !important;
+}
+
+.glider-dot {
+  background: #FFFFFF80 !important;
+}
+
+.myDots  {
+  position: relative !important;
+  top: -50px !important;
+}
+
+.heroBtn {
+  animation: glowing 2300ms infinite;
+}
+
+@media screen and (max-width: 1160px) {
+  #service .slick-prev {
+    left: 20% !important;
+  }
+  
+  #service .slick-next {
+    right: 20% !important;
+  }
+}
+@media screen and (max-width: 1023px) {
+  #service .slick-prev, #service .slick-next {
+    width: 35px !important;
+    top: 46px !important;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  #service .slick-prev {
+    left: 15% !important;
+  }
+  
+  #service .slick-next {
+    right: 15% !important;
+  }
+
+}
+@media screen and (max-width: 735px) {
+  #service .slick-prev {
+    left: 10% !important;
+  }
+  
+  #service .slick-next {
+    right: 10% !important;
+  }
+}
+@media screen and (max-width: 639px) {
+  #service .slick-prev, #service .slick-next {
+    width: 30px !important;
+    top: 50px !important;
+    z-index: 9999999;
+  }
+
+  #clients .slick-prev, #clients .slick-next {
+    width: 30px !important;
+    top: 40% !important;
+    z-index: 9999;
+  }
+
+
+  #service .slick-prev {
+    left: 5% !important;
+  }
+  
+  #service .slick-next {
+    right: 5% !important;
+  }
+}
+
+@media screen and (max-width: 530px) {
+  #service .slick-prev {
+    left: 5% !important;
+  }
+  
+  #service .slick-next {
+    right: 5% !important;
+  }
+
+}
+
+@media screen and (max-width: 400px) {
+  #service .slick-prev {
+    left: 1% !important;
+  }
+  
+  #service .slick-next {
+    right: 1% !important;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  #service .glider-prev , #service .glider-next {
+    display: none !important;
+  }
+}
+@media screen and (min-width: 768px) {
+  #service .glider-prev , #service .glider-next {
+    top: 350px !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #service .glider-prev , #service .glider-next {
+    top: 300px !important;
+  }
+}
+
+
+.whatsapplogo::before, .whatsapplogo::after {
+
+  position: absolute;
+  content: '';
+  height: 100%;
+  width: 100%;
+  top: 0%;
+  left: 0%;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #0dc143;
+  animation: whatsapplogo 2s ease-out infinite;
+
+}
+
+.serviceContainer:hover .svgserviceIcon path {
+  fill: #ff8e26;
+  stroke: #ff8e26;
+  transition: all;
+  transition-duration: 500ms;
+}
+
+@keyframes whatsapplogo {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.callbutton::before, .callbutton::after {
+  position: absolute;
+  content: '';
+  height: 100%;
+  width: 100%;
+  top: 0%;
+  left: 0%;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+  animation: callbuttonGlow 2s ease-out infinite;
+}
+
+@keyframes callbuttonGlow {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes glowing {
+  0% {
+    background-color: #28509E;
+    border: 1px solid #25D366;
+  }
+  100% {
+    background: #60d669; 
+    border: 1px solid #25D366;
+  }
+}
+#clients .slick-track img {
+  width: 50% !important;
+}
+
+#clients .slick-track {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+
+.snip1533 *,
+.snip1533 *:before {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: all 0.1s ease-out;
+  transition: all 0.1s ease-out;
+}
+
+.snip1533 figcaption {
+  padding: 10% 5% 6%;
+}
+
+.snip1533 figcaption:before {
+  transform: translateX(-50%);
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 50%;
+  top: -20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.arrowTesti{
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 15px solid white;
+  position: relative;
+  top: 15px;
+  left: 49%;
+}
+
+#testimonials .slick-arrow {
+  display: none !important;
+}
+
+/* Scrollbar hide utility for horizontal scrolling tabs */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+#testimonials .slick-dots li.slick-active button::before ,
+#testimonials .slick-dots li button:hover::before {
+  color: #FF8E26 !important;
+}
+
+
+#testimonials .slick-slide.slick-current .snip1533 figcaption:before,
+#testimonials .slick-slide.myslick-current .snip1533 figcaption:before {
+  content: url(../public/assets/quoteactive.svg) !important;
+}
+#testimonials .slick-slide .snip1533 figcaption:before {
+  content: url(../public/assets/quoteblue.svg) !important;
+}
+
+#testimonials .slick-slide {
+  transition: all 0.3s ease-in-out;
+}
+
+#testimonials .slick-slide {
+  padding: 30px;
+}
+
+#testimonials .slick-slide.slick-current,
+#testimonials .slick-slide.myslick-current {
+  padding: 0px 30px !important;
+}
+
+
+@media screen and (max-width: 1000px) {
+  #testimonials .slick-slide {
+    padding: 10px;
+    padding-right: 20px !important;
+  }
+  
+  #testimonials .slick-slide.slick-current,
+  #testimonials .slick-slide.myslick-current {
+    padding: 0px 10px !important;
+  }
+  
+}
+
+@media screen and (max-width: 900px) {
+  #testimonials .slick-slide {
+    padding: 0px 10px !important;
+  }
+  
+  #testimonials .slick-slide.slick-current,
+  #testimonials .slick-slide.myslick-current {
+    padding: 0px 10px !important;
+    padding-right: 30px !important;
+  }
+  
+}
+
+#WhychoseUs .slick-slide {
+  padding: 0px 30px;
+  height: inherit !important;
+}
+
+#hero .slick-slide {
+  height: inherit !important;
+}
+
+#WhychoseUs .slick-arrow {
+  display: none !important;
+}
+
+#WhychoseUs .slick-slide > div , #hero .slick-slide > div {
+  height: 100% !important;
+}
+
+#WhychoseUs .slick-slide > div > div {
+  display: flex !important;
+}
+
+#WhychoseUs .slick-track , #hero .slick-track {
+  height: auto !important;
+  display: flex !important;
+}
+
+
+@media screen and (max-width: 650px) {
+  #WhychoseUs .slick-slide {
+    padding: 0px 10px;
+    height: inherit !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #WhychoseUs .slick-slide {
+    padding: 0px 20px;
+    height: inherit !important;
+  }
+}
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+.slick-list {
+  overflow: hidden !important;
+}
+
+.slick-track {
+  overflow: hidden !important;
+}
+@media screen and (max-width: 768px) {
+  #testimonials .slick-slide {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
+@media screen and (max-width: 768px) {
+  #clientsSection .slick-track img {
+    width: 100% !important;
+  }
+
+  #clientsSection .slick-slide {
+    display: flex !important;
+    justify-content: center !important;
+  }
+}
+/* REMOVE slick default arrow circles */
+#clientsSection .slick-prev,
+#clientsSection .slick-next {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+#clientsSection .slick-prev::before,
+#clientsSection .slick-next::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* REMOVE browser button styles */
+#clientsSection button {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+}
+
+/* REMOVE focus ring */
+#clientsSection button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
