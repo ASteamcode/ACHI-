@@ -206,10 +206,7 @@ const Projects = () => {
 
   const heroBg = `${base}/assets/workDone/AISHTI MALL - JAL EL DIB/edit.JPG`
 
-  const heroStyle = useMemo(
-    () => ({ backgroundImage: `url("${heroBg}")` }),
-    [heroBg]
-  )
+  const heroStyle = useMemo(() => ({ backgroundImage: `url("${heroBg}")` }), [heroBg])
 
   const activeProject = projects.find((p) => p.id === activeId) || null
 
@@ -231,57 +228,65 @@ const Projects = () => {
     }
   }, [activeProject])
 
+  useEffect(() => {
+    if (!activeProject) return
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setActiveId(null)
+    }
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [activeProject])
+
   return (
     <main className="bg-[#f5f7fb] text-[#1b3155]">
       <SEO
-        title="Projects | Our Work Portfolio | ACHI Scaffolding"
-        description="Explore ACHI Scaffolding's portfolio of successful scaffolding and shoring projects across Lebanon. Construction, renovation, and industrial projects."
+        title="Scaffolding Projects & Execution Experience | ACHI Scaffolding"
+        description="ACHI Scaffolding supports a range of project types, adapting access systems to site constraints, timelines, and safety requirements."
         canonical="https://achi-scaffolding.github.io/projects"
       />
-    <section
-  className="relative bg-no-repeat bg-cover bg-center"
-  style={heroStyle}
->
-  <div className="absolute inset-0 z-0 bg-[rgba(0,35,90,0.55)] backdrop-brightness-[0.9]"></div>
 
-  <motion.div
-    initial={{ opacity: 0, scale: 0.8 }}
-    whileInView={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.8, delay: 0.3 }}
-    viewport={{ once: true }}
-    className="relative z-10 w-full h-full flex flex-col justify-center text-left
-               pt-[110px] pb-[200px] md:pt-[130px] md:pb-[240px]
-               pl-[20px] md:pl-[70px] pr-[20px]"
-  >
-    <h1 className="font-[Rajdhani] text-white text-[28px] md:text-[42px] font-[700] uppercase mb-[12px]">
-      Projects
-    </h1>
+      <section className="relative bg-no-repeat bg-cover bg-center" style={heroStyle}>
+        <div className="absolute inset-0 z-0 bg-[rgba(0,35,90,0.55)] backdrop-brightness-[0.9]" />
 
-    <p className="text-white/90 font-['Open_Sans'] text-[16px] md:text-[17px] leading-[1.7] max-w-[650px]">
-      Discover a selection of our completed projects and scaffolding installations across Lebanon and beyond.
-    </p>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          viewport={{ once: true }}
+          className="relative z-10 w-full h-full flex flex-col justify-center text-left
+                     pt-[110px] pb-[200px] md:pt-[130px] md:pb-[240px]
+                     pl-[20px] md:pl-[70px] pr-[20px]"
+        >
+          <h1 className="font-[Rajdhani] text-white text-[28px] md:text-[42px] font-[700] uppercase mb-[12px]">
+            Projects
+          </h1>
 
-    <div className="mt-[28px]">
-      <a
-        href="https://wa.me/+96103322811"
-        target="_blank"
-        rel="noreferrer"
-        className="inline-flex w-fit px-[28px] sm:px-[34px]
-                   text-[12px] md:text-[15px]
-                   text-white font-[Rajdhani] font-[700] leading-[29px]
-                   py-[15px]
-                   bg-[#28509E] rounded-[12px] uppercase
-                   hover:bg-[#25D366]
-                   border-[#FFF] hover:border-[#25D366]
-                   border-solid border-2
-                   transition duration-500 heroBtn"
-      >
-        send enquiry over whatsapp
-      </a>
-    </div>
-  </motion.div>
-</section>
+          <p className="text-white/90 font-['Open_Sans'] text-[16px] md:text-[17px] leading-[1.7] max-w-[650px]">
+  ACHI Scaffolding supports a range of project types, adapting access systems to site constraints, timelines, and safety requirements.
+</p>
 
+
+          <div className="mt-[28px]">
+            <a
+              href="https://wa.me/+96103322811"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Request scaffolding project information over WhatsApp"
+              className="inline-flex w-fit px-[28px] sm:px-[34px]
+                         text-[12px] md:text-[15px]
+                         text-white font-[Rajdhani] font-[700] leading-[29px]
+                         py-[15px]
+                         bg-[#28509E] rounded-[12px] uppercase
+                         hover:bg-[#25D366]
+                         border-[#FFF] hover:border-[#25D366]
+                         border-solid border-2
+                         transition duration-500 heroBtn"
+            >
+              send enquiry over whatsapp
+            </a>
+          </div>
+        </motion.div>
+      </section>
 
       <section className="py-[50px]">
         <div className="w-[90%] max-w-[1200px] mx-auto">
@@ -297,7 +302,7 @@ const Projects = () => {
               >
                 <img
                   src={p.img}
-                  alt={`${p.title} Project Image`}
+                  alt={`${p.title} scaffolding project`}
                   className="w-full h-[270px] object-cover"
                   loading="lazy"
                   decoding="async"
@@ -312,7 +317,7 @@ const Projects = () => {
                     {p.desc}
                   </p>
 
-                  <div className="flex flex-wrap gap-[10px] mb-[16px]">
+                  <div className="flex flex-wrap gap-[10px] mb-[16px]" aria-label={`${p.title} project tags`}>
                     {p.tags.map((tag) => (
                       <span
                         key={`${p.id}-${tag}`}
@@ -332,6 +337,7 @@ const Projects = () => {
                                  px-[18px] py-[6px] rounded-[30px]
                                  transition duration-300 hover:bg-[#214f9b] hover:text-white
                                  mx-auto md:mx-0"
+                      aria-label={`View project photos for ${p.title}`}
                     >
                       View More
                     </button>
@@ -343,11 +349,11 @@ const Projects = () => {
         </div>
       </section>
 
-      <section className="bg-[#f5f7fa] py-[50px] text-center">
+      <section className="bg-[#f5f7fa] py-[50px] text-center" aria-label="Projects count">
         <div className="inline-flex items-center gap-[18px]">
           <img
             src={`${process.env.PUBLIC_URL}/assets/home.png`}
-            alt="Home Icon"
+            alt="Projects icon"
             className="w-[60px] h-auto object-contain"
             loading="lazy"
             decoding="async"
@@ -363,7 +369,7 @@ const Projects = () => {
         </div>
       </section>
 
-      <section className="bg-[#214f9b] py-[70px] text-white">
+      <section className="bg-[#214f9b] py-[70px] text-white" aria-label="Newsletter subscription">
         <div className="w-[90%] max-w-[1200px] mx-auto flex flex-col lg:flex-row justify-between items-center gap-[40px]">
           <h2 className="font-[Rajdhani] text-[32px] md:text-[42px] font-[700] uppercase leading-[1.2] text-center">
             Subscribe to our <br /> newsletter
@@ -373,14 +379,21 @@ const Projects = () => {
             className="flex flex-col md:flex-row items-center gap-[20px] w-full lg:w-auto"
             onSubmit={(e) => e.preventDefault()}
           >
+            <label htmlFor="newsletter-email" className="sr-only">
+              Email address
+            </label>
             <input
+              id="newsletter-email"
               type="email"
               className="w-full md:w-[380px] px-[18px] py-[14px] rounded-[8px] border border-white/40 bg-transparent text-white text-[15px] outline-none"
               placeholder="Email"
+              autoComplete="email"
+              inputMode="email"
             />
             <button
               type="submit"
               className="px-[34px] py-[14px] bg-[#ff8a00] rounded-[8px] text-white font-[Rajdhani] font-[700] text-[15px] uppercase transition hover:bg-[#e77a00] w-full md:w-auto"
+              aria-label="Subscribe to newsletter"
             >
               Subscribe
             </button>
@@ -392,6 +405,9 @@ const Projects = () => {
         <div
           className="fixed inset-0 z-[99999999] bg-black/70 overflow-y-auto"
           onClick={() => setActiveId(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${activeProject.title} project gallery`}
         >
           <div className="min-h-full flex items-start justify-center px-[14px] py-[30px]">
             <div
@@ -407,7 +423,7 @@ const Projects = () => {
                   type="button"
                   className="inline-flex items-center justify-center w-[44px] h-[44px] rounded-full border-2 border-[#214f9b] text-[#214f9b] font-[900] text-[24px] hover:bg-[#214f9b] hover:text-white transition"
                   onClick={() => setActiveId(null)}
-                  aria-label="Close modal"
+                  aria-label="Close project gallery"
                 >
                   ×
                 </button>
@@ -419,7 +435,7 @@ const Projects = () => {
                     <img
                       key={`${activeProject.id}-${index}`}
                       src={src}
-                      alt={`${activeProject.title} image`}
+                      alt={`${activeProject.title} scaffolding work photo ${index + 1}`}
                       style={MODAL_IMAGE_STYLE}
                       loading="lazy"
                       decoding="async"

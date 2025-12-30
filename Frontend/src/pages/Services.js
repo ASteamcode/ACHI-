@@ -45,7 +45,7 @@ const Services = () => {
           viewport={{ once: true }}
           className="relative max-w-[1250px] mx-auto px-[20px]"
         >
-          <h1 className="font-[Rajdhani] text-white text-[55px] md:text-[55px] font-[700] uppercase leading-[0.95]">
+          <h1 className="font-[Rajdhani] text-white text-[55px] md:text-[42px] font-[700] uppercase leading-[0.95]">
             Services
           </h1>
 

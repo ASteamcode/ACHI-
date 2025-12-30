@@ -56,12 +56,36 @@ const Blog = () => {
   }
 
   return (
-    <div className="blog-page">
+    <main className="blog-page">
       <SEO
-        title="Blog | Scaffolding News & Insights | ACHI"
-        description="Read the latest news, insights, and updates about scaffolding, construction, and shoring solutions from ACHI Scaffolding."
+        title="Scaffolding Systems, Safety, and Technical Insights | ACHI Scaffolding"
+        description="Educational and technical resources covering scaffolding systems, applications, and decision-making for construction professionals."
         canonical="https://achi-scaffolding.github.io/blog"
       />
+
+      {/* SEO SUPPORT (no visual UI change) */}
+      <section className="sr-only" aria-label="ACHI Scaffolding entity definition">
+        <p>
+          ACHI Scaffolding is an industrial and construction scaffolding contractor and equipment provider delivering
+          access systems, shoring, and scaffolding solutions for restoration, infrastructure, and complex building
+          projects.
+        </p>
+
+        <nav aria-label="Internal links">
+          <ul>
+            <li>
+              <Link to="/products">View Scaffolding Products</Link>
+            </li>
+            <li>
+              <Link to="/projects">Explore Project Experience</Link>
+            </li>
+            <li>
+              <Link to="/contact">Request Scaffolding Information or Technical Support</Link>
+            </li>
+          </ul>
+        </nav>
+      </section>
+
       <section className="blog-header-title mt-[30px]">
         <motion.h1
           initial={{ opacity: 0, scale: 0.8 }}
@@ -74,7 +98,7 @@ const Blog = () => {
         </motion.h1>
       </section>
 
-      <section className="other-articles-section">
+      <section className="other-articles-section" aria-label="Blog articles">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -104,14 +128,14 @@ const Blog = () => {
                     srcWebp={post.image}
                     className="object-cover w-full rounded-[17px]"
                     src={post.image}
-                    alt={`${post.title} article thumbnail`}
+                    alt={post.title}
                   />
                 </div>
 
                 <div className="other-article-content w-full">
-                  <h3 className="text-[18px] font-saira font-[700] lg:leading-[28px] text-[#003A80] transition-colors duration-300 my-[12px] xl:text-[18px] lg:text-[18px] md:text-[18px] sm:text-[18px] capitalize">
+                  <h2 className="text-[18px] font-saira font-[700] lg:leading-[28px] text-[#003A80] transition-colors duration-300 my-[12px] xl:text-[18px] lg:text-[18px] md:text-[18px] sm:text-[18px] capitalize">
                     {post.title}
-                  </h3>
+                  </h2>
 
                   <p className="text-[13px] lg:leading-[19px] text-[#003A80] font-[400] font-saira">
                     {post.excerpt}
@@ -120,6 +144,7 @@ const Blog = () => {
                   <div className="w-full flex justify-end items-center mt-[15px] mb-[30px] md:mb-[0]">
                     <Link
                       to={post.link}
+                      aria-label={`Read more: ${post.title}`}
                       className="group font-saira uppercase font-[600] text-[#003A80] text-[18px] transition-all mr-[15px] inline-flex items-center gap-[12px] hover:text-[#ff8e26]"
                     >
                       READ MORE
@@ -137,7 +162,7 @@ const Blog = () => {
           })}
         </motion.div>
       </section>
-    </div>
+    </main>
   )
 }
 

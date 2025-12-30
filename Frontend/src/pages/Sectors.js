@@ -1,40 +1,80 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { sectors } from "../data/sectors";
-import SEO from "../components/SEO";
+// src/pages/Sectors.js
+import React from "react"
+import { motion } from "framer-motion"
+import { Link } from "react-router-dom"
+import { sectors } from "../data/sectors"
+import SEO from "../components/SEO"
 
 const Sectors = () => {
-
   return (
     <main id="sectors" className="bg-[#f5f7fb] text-[#1b3155]">
       <SEO
-        title="Sectors | Industries We Serve | ACHI Scaffolding"
-        description="ACHI Scaffolding serves multiple sectors including renovation, construction, events, industrial facilities, oil & gas, and marine projects across Lebanon."
+        title="Industries Served | Scaffolding Sectors | ACHI Scaffolding"
+        description="ACHI Scaffolding is an industrial and construction scaffolding contractor and equipment provider delivering access systems, shoring, and scaffolding solutions for restoration, infrastructure, and complex building projects."
         canonical="https://achi-scaffolding.github.io/sectors"
       />
-      {/* Hero Section */}
+
       <section className="py-[60px]">
-        <div className="w-[90%] max-w-[1200px] mx-auto text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-[#214f9b] font-[900] uppercase text-[30px] md:text-[40px]"
-          >
-            SECTORS
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-[10px] text-[#4a5c7a] text-[14px] md:text-[15px] leading-[1.7] max-w-[820px] mx-auto"
-          >
-            We provide specialized scaffolding solutions across diverse sectors, ensuring safety, reliability, and compliance for every project type.
-          </motion.p>
+        <div className="w-[90%] max-w-[1200px] mx-auto">
+          <div className="bg-white rounded-[18px] shadow-[0_10px_30px_rgba(17,35,64,0.08)] px-[22px] md:px-[38px] py-[28px] md:py-[34px]">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-[#214f9b] font-[900] uppercase text-[30px] md:text-[40px] leading-[1.1] text-center md:text-center"
+            >
+              Industries Served
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="mt-[12px] text-[#4a5c7a] text-[14px] md:text-[15px] leading-[1.8] max-w-[980px] text-center md:text-left"
+            >
+              ACHI Scaffolding is an industrial and construction scaffolding contractor and equipment provider delivering access systems, shoring, and scaffolding solutions for restoration, infrastructure, and complex building projects.
+            </motion.p>
+
+            <div className="mt-[18px] grid grid-cols-1 md:grid-cols-2 gap-[10px]">
+              <div className="flex items-start gap-[10px]">
+                <span className="mt-[8px] w-[6px] h-[6px] rounded-full bg-[#214f9b]" />
+                <p className="text-[#4a5c7a] text-[14px] md:text-[15px] leading-[1.7]">
+                  Construction & general contracting
+                </p>
+              </div>
+
+              <div className="flex items-start gap-[10px]">
+                <span className="mt-[8px] w-[6px] h-[6px] rounded-full bg-[#214f9b]" />
+                <p className="text-[#4a5c7a] text-[14px] md:text-[15px] leading-[1.7]">
+                  Building restoration & renovation
+                </p>
+              </div>
+
+              <div className="flex items-start gap-[10px]">
+                <span className="mt-[8px] w-[6px] h-[6px] rounded-full bg-[#214f9b]" />
+                <p className="text-[#4a5c7a] text-[14px] md:text-[15px] leading-[1.7]">
+                  Industrial facilities & plants
+                </p>
+              </div>
+
+              <div className="flex items-start gap-[10px]">
+                <span className="mt-[8px] w-[6px] h-[6px] rounded-full bg-[#214f9b]" />
+                <p className="text-[#4a5c7a] text-[14px] md:text-[15px] leading-[1.7]">
+                  Residential and commercial developments
+                </p>
+              </div>
+            </div>
+
+           <div className="sr-only" aria-hidden="false">
+            <Link to="/products">View Scaffolding Products</Link>
+            <Link to="/projects">Explore Project Experience</Link>
+            <Link to="/services">Learn About Scaffolding Systems</Link>
+           </div>
+
+          </div>
         </div>
       </section>
 
-      {/* Sectors Grid Section */}
       <section className="pb-[60px]">
         <div className="w-[90%] max-w-[1200px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
@@ -59,7 +99,6 @@ const Sectors = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-[55px] bg-[#eef3fb]">
         <div className="w-[90%] max-w-[1200px] mx-auto flex flex-col md:flex-row items-center justify-between gap-[18px]">
           <motion.div
@@ -73,7 +112,7 @@ const Sectors = () => {
               Need Scaffolding Solutions for Your Sector?
             </h2>
             <p className="mt-[8px] text-[#4a5c7a] text-[14px] leading-[1.7]">
-              Share your sector-specific requirements and we'll recommend the best scaffolding system for your project.
+              Share your project requirements and we’ll recommend the right access system, shoring approach, or scaffolding solution for your site conditions.
             </p>
           </motion.div>
 
@@ -85,6 +124,7 @@ const Sectors = () => {
             href="https://wa.me/96103322811"
             target="_blank"
             rel="noreferrer"
+            aria-label="Request scaffolding information or technical support over WhatsApp"
             className="inline-flex items-center justify-center px-[18px] py-[12px] rounded-[12px] bg-[#28509E] text-white font-[900] uppercase text-[13px] border-2 border-white hover:bg-[#25D366] hover:border-[#25D366] transition"
           >
             Send us your enquiry over WhatsApp
@@ -92,7 +132,7 @@ const Sectors = () => {
         </div>
       </section>
     </main>
-  );
-};
+  )
+}
 
-export default Sectors;
+export default Sectors
