@@ -5,10 +5,12 @@ import * as THREE from "three"
 import SEO from "../components/SEO"
 
 const Products = () => {
+ const publicUrl = process.env.PUBLIC_URL || "";
+
   // Modal state for AR View
   const [isAROpen, setIsAROpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null)
-  // Store refs for inline model-viewer elements (non-interactive)
+// Store refs for inline model-viewer elements (non-interactive)
   const modelViewerRefs = useRef({})
   // Store ref for modal model-viewer (interactive)
   const modalViewerRef = useRef(null)
@@ -632,125 +634,150 @@ const Products = () => {
     }
   }, [])
 
-  const products = useMemo(
-    () => [
-      {
-        type: "3d",
-        title: "Double Coupler 3D Component",
-        desc: "High-strength double coupler for connecting scaffold tubes at 90° with precise alignment.",
-        model: "/assets/products/double_coupler.glb",
-        badge: "3D VIEW",
-        cameraOrbit: "0deg 70deg 120%",
-        fieldOfView: "30deg",
-        cameraTarget: "0m 0m 0m",
-        specs: ["3D interactive model", "Ideal for tube and fitting systems", "Optimized for heavy-duty connections"],
-        tags: ["Rotate", "Zoom", "Inspect"],
-      },
-      {
-        type: "3d",
-        title: "H Frame 3D Component",
-        desc: "3D visualization of H frame scaffolding for façade and elevation works.",
-        model: "/assets/products/h_frame.glb",
-        badge: "3D VIEW",
-        cameraOrbit: "0deg 70deg 120%",
-        fieldOfView: "30deg",
-        cameraTarget: "0m 0m 0m",
-        specs: ["Quick-assembly frame geometry", "Stable vertical support", "Compatible with standard accessories"],
-        tags: ["Rotate", "Zoom", "Inspect"],
-      },
-      {
-        type: "3d",
-        title: "Joint Coupler 3D Component",
-        desc: "3D model of the joint coupler used to connect scaffold tubes end-to-end.",
-        model: "/assets/products/joint_coupler.glb",
-        badge: "3D VIEW",
-        cameraOrbit: "0deg 70deg 120%",
-        fieldOfView: "30deg",
-        cameraTarget: "0m 0m 0m",
-        specs: ["End-to-end tube connection", "Rigid alignment in elevation", "Ideal for extending ledgers and standards"],
-        tags: ["Rotate", "Zoom", "Inspect"],
-      },
-      {
-        type: "3d",
-        title: "Half Coupler 3D Component",
-        desc: "3D visualization of half coupler used for connecting scaffold tubes to accessories.",
-        model: "/assets/products/half_coupler.glb",
-        badge: "3D VIEW",
-        cameraOrbit: "0deg 70deg 120%",
-        fieldOfView: "30deg",
-        cameraTarget: "0m 0m 0m",
-        specs: ["Single jaw connection", "For beams, brackets and specials", "High tightening capacity"],
-        tags: ["Rotate", "Zoom", "Inspect"],
-      },
-      {
-        type: "3d",
-        title: "Swivel Coupler 3D Component",
-        desc: "3D model of swivel coupler for connecting tubes at variable angles.",
-        model: "/assets/products/swivel_coupler.glb",
-        badge: "3D VIEW",
-        cameraOrbit: "0deg 70deg 120%",
-        fieldOfView: "30deg",
-        cameraTarget: "0m 0m 0m",
-        specs: ["Flexible angle connections", "Perfect for bracing and ties", "High-strength forged body"],
-        tags: ["Rotate", "Zoom", "Inspect"],
-      },
-      {
-        type: "3d",
-        title: "Stirrup Head 3D Component",
-        desc: "3D model of a stirrup head used for shoring support and formwork applications where stable load transfer and safe positioning are required.",
-        model: "/assets/products/stirrup_head.glb",
-        badge: "3D VIEW",
-        cameraOrbit: "0deg 70deg 120%",
-        fieldOfView: "30deg",
-        cameraTarget: "0m 0m 0m",
-        specs: ["Shoring head accessory for props", "Supports beams and formwork elements", "Designed for stable positioning on site"],
-        tags: ["Rotate", "Zoom", "Inspect"],
-      },
-      {
-        type: "img",
-        title: "Standard Frame Scaffolding",
-        desc: "Modular steel frames for construction and maintenance work.",
-        img: "/assets/products/Standard_Frame_Scaffolding.jpg",
-        specs: ["Height per bay: up to 6 m", "Load class: up to 3", "Finish: painted / galvanized"],
-      },
-      {
-        type: "img",
-        title: "Ringlock System Scaffolding",
-        desc: "Heavy-duty system scaffolding for high-rise structures.",
-        img: "/assets/products/Ringlock_System_Scaffolding.png",
-        specs: ["High load capacity", "Flexible geometry", "Ideal for multi-storey projects"],
-      },
-      {
-        type: "img",
-        title: "Suspended Scaffolding Platforms",
-        desc: "Motorized and manual swing stages for façade works.",
-        img: "/assets/products/Suspended_Scaffolding_Platforms.jpg",
-        specs: ["Adjustable height", "Excellent for façades", "Safety guardrails included"],
-      },
-      {
-        type: "img",
-        title: "Adjustable Base Jacks",
-        desc: "Precise leveling for uneven or sloped surfaces.",
-        img: "/assets/products/Adjustable_Base_Jacks.jpg",
-        specs: ["Diameter: 38–48 mm", "Adjustment: up to 600 mm", "Galvanized steel"],
-      },
-      {
-        type: "img",
-        title: "Steel Scaffold Planks",
-        desc: "Anti-slip planks for working surfaces.",
-        img: "/assets/products/Steel_Scaffold_Planks.jpg",
-        specs: ["Lengths: 1.0 – 3.0 m", "Anti-slip surface", "Secure locking hooks"],
-      },
-      {
-        type: "img",
-        title: "Full Scaffolding Safety Kit",
-        desc: "Complete safety protection equipment.",
-        img: "/assets/products/Full_Scaffolding_Safety_Kit.png",
-        specs: ["Harness and double lanyard", "Helmet and vest", "Gloves and safety shoes"],
-      },
-    ],
-    []
-  )
+const products = useMemo(
+  () => [
+    {
+      type: "3d",
+      title: "Double Coupler 3D Component",
+      desc: "High-strength double coupler for connecting scaffold tubes at 90° with precise alignment.",
+      model: `${publicUrl}/assets/products/double_coupler.glb`,
+      badge: "3D VIEW",
+      cameraOrbit: "0deg 70deg 120%",
+      fieldOfView: "30deg",
+      cameraTarget: "0m 0m 0m",
+      specs: [
+        "3D interactive model",
+        "Ideal for tube and fitting systems",
+        "Optimized for heavy-duty connections",
+      ],
+      tags: ["Rotate", "Zoom", "Inspect"],
+    },
+    {
+      type: "3d",
+      title: "H Frame 3D Component",
+      desc: "3D visualization of H frame scaffolding for façade and elevation works.",
+      model: `${publicUrl}/assets/products/h_frame.glb`,
+      badge: "3D VIEW",
+      cameraOrbit: "0deg 70deg 120%",
+      fieldOfView: "30deg",
+      cameraTarget: "0m 0m 0m",
+      specs: [
+        "Quick-assembly frame geometry",
+        "Stable vertical support",
+        "Compatible with standard accessories",
+      ],
+      tags: ["Rotate", "Zoom", "Inspect"],
+    },
+    {
+      type: "3d",
+      title: "Joint Coupler 3D Component",
+      desc: "3D model of the joint coupler used to connect scaffold tubes end-to-end.",
+      model: `${publicUrl}/assets/products/joint_coupler.glb`,
+      badge: "3D VIEW",
+      cameraOrbit: "0deg 70deg 120%",
+      fieldOfView: "30deg",
+      cameraTarget: "0m 0m 0m",
+      specs: [
+        "End-to-end tube connection",
+        "Rigid alignment in elevation",
+        "Ideal for extending ledgers and standards",
+      ],
+      tags: ["Rotate", "Zoom", "Inspect"],
+    },
+    {
+      type: "3d",
+      title: "Half Coupler 3D Component",
+      desc: "3D visualization of half coupler used for connecting scaffold tubes to accessories.",
+      model: `${publicUrl}/assets/products/half_coupler.glb`,
+      badge: "3D VIEW",
+      cameraOrbit: "0deg 70deg 120%",
+      fieldOfView: "30deg",
+      cameraTarget: "0m 0m 0m",
+      specs: [
+        "Single jaw connection",
+        "For beams, brackets and specials",
+        "High tightening capacity",
+      ],
+      tags: ["Rotate", "Zoom", "Inspect"],
+    },
+    {
+      type: "3d",
+      title: "Swivel Coupler 3D Component",
+      desc: "3D model of swivel coupler for connecting tubes at variable angles.",
+      model: `${publicUrl}/assets/products/swivel_coupler.glb`,
+      badge: "3D VIEW",
+      cameraOrbit: "0deg 70deg 120%",
+      fieldOfView: "30deg",
+      cameraTarget: "0m 0m 0m",
+      specs: [
+        "Flexible angle connections",
+        "Perfect for bracing and ties",
+        "High-strength forged body",
+      ],
+      tags: ["Rotate", "Zoom", "Inspect"],
+    },
+    {
+      type: "3d",
+      title: "Stirrup Head 3D Component",
+      desc: "3D model of a stirrup head used for shoring support and formwork applications where stable load transfer and safe positioning are required.",
+      model: `${publicUrl}/assets/products/stirrup_head.glb`,
+      badge: "3D VIEW",
+      cameraOrbit: "0deg 70deg 120%",
+      fieldOfView: "30deg",
+      cameraTarget: "0m 0m 0m",
+      specs: [
+        "Shoring head accessory for props",
+        "Supports beams and formwork elements",
+        "Designed for stable positioning on site",
+      ],
+      tags: ["Rotate", "Zoom", "Inspect"],
+    },
+    {
+      type: "img",
+      title: "Standard Frame Scaffolding",
+      desc: "Modular steel frames for construction and maintenance work.",
+      img: `${publicUrl}/assets/products/Standard_Frame_Scaffolding.jpg`,
+      specs: ["Height per bay: up to 6 m", "Load class: up to 3", "Finish: painted / galvanized"],
+    },
+    {
+      type: "img",
+      title: "Ringlock System Scaffolding",
+      desc: "Heavy-duty system scaffolding for high-rise structures.",
+      img: `${publicUrl}/assets/products/Ringlock_System_Scaffolding.png`,
+      specs: ["High load capacity", "Flexible geometry", "Ideal for multi-storey projects"],
+    },
+    {
+      type: "img",
+      title: "Suspended Scaffolding Platforms",
+      desc: "Motorized and manual swing stages for façade works.",
+      img: `${publicUrl}/assets/products/Suspended_Scaffolding_Platforms.jpg`,
+      specs: ["Adjustable height", "Excellent for façades", "Safety guardrails included"],
+    },
+    {
+      type: "img",
+      title: "Adjustable Base Jacks",
+      desc: "Precise leveling for uneven or sloped surfaces.",
+      img: `${publicUrl}/assets/products/Adjustable_Base_Jacks.jpg`,
+      specs: ["Diameter: 38–48 mm", "Adjustment: up to 600 mm", "Galvanized steel"],
+    },
+    {
+      type: "img",
+      title: "Steel Scaffold Planks",
+      desc: "Anti-slip planks for working surfaces.",
+      img: `${publicUrl}/assets/products/Steel_Scaffold_Planks.jpg`,
+      specs: ["Lengths: 1.0 – 3.0 m", "Anti-slip surface", "Secure locking hooks"],
+    },
+    {
+      type: "img",
+      title: "Full Scaffolding Safety Kit",
+      desc: "Complete safety protection equipment.",
+      img: `${publicUrl}/assets/products/Full_Scaffolding_Safety_Kit.png`,
+      specs: ["Harness and double lanyard", "Helmet and vest", "Gloves and safety shoes"],
+    },
+  ],
+  [publicUrl]
+)
+
 
   return (
     <main className="bg-[#f5f7fb] text-[#1b3155]">

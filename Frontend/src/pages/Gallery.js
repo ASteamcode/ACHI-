@@ -12,7 +12,7 @@ const ENTITY_DEFINITION =
 const Gallery = () => {
   const { t } = useTranslation()
 
-  const base = process.env.PUBLIC_URL || ""
+  const base = process.env.PUBLIC_URL || "/ACHI-"
 
   const images = useMemo(() => {
     const files = [
@@ -232,7 +232,7 @@ const Gallery = () => {
       <SEO
         title="Gallery | Scaffolding Project Photos | ACHI Scaffolding"
         description="Browse photos from ACHI Scaffolding projects, including scaffolding systems and shoring solutions used across construction, restoration, and industrial sites."
-        canonical="https://achi-scaffolding.github.io/gallery"
+        canonical={`${base}/gallery`}
       />
 
       <div className="gallery-page" id="gallery">
