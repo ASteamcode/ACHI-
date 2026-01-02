@@ -1,3 +1,4 @@
+// Frontend/src/pages/About.js
 import React from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
@@ -5,12 +6,14 @@ import StatsHighlights from "../components/StatsHighlights"
 import SEO from "../components/SEO"
 
 const About = () => {
+  const publicUrl = process.env.PUBLIC_URL || ""
+
   const orgSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "ACHI Scaffolding",
-    url: "https://achi-scaffolding.github.io",
-    logo: "https://achi-scaffolding.github.io/assets/ArchiScaffoldinglogo.png",
+    url: `${publicUrl || "https://as-group1.github.io/ACHI-"}`,
+    logo: `${publicUrl}/assets/ArchiScaffoldinglogo.png`,
     description:
       "ACHI Scaffolding is an industrial and construction scaffolding contractor and equipment provider delivering access systems, shoring, and scaffolding solutions for restoration, infrastructure, and complex building projects.",
   }
@@ -20,7 +23,7 @@ const About = () => {
       <SEO
         title="A Scaffolding Contractor Focused on Execution, Safety, and Reliability | ACHI Scaffolding"
         description="ACHI Scaffolding is an industrial and construction scaffolding contractor and equipment provider delivering access systems, shoring, and scaffolding solutions for restoration, infrastructure, and complex building projects."
-        canonical="https://achi-scaffolding.github.io/about"
+        canonical={`${publicUrl}/about`}
       />
 
       <script
@@ -32,7 +35,7 @@ const About = () => {
         <div className="about-layout grid grid-cols-1 lg:grid-cols-2 items-stretch w-full lg:h-[520px]">
           <div
             className="about-image min-h-[260px] lg:min-h-[480px] bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: "url('/assets/about.webp')" }}
+            style={{ backgroundImage: `url(${publicUrl}/assets/about.webp)` }}
             aria-label="Achi Scaffolding about hero image"
             role="img"
           />
@@ -104,11 +107,15 @@ const About = () => {
                 lineHeight: "1.2",
               }}
             >
-              A SCAFFOLDING CONTRACTOR FOCUSED ON EXECUTION, SAFETY, AND RELIABILITY
+              A SCAFFOLDING CONTRACTOR FOCUSED ON EXECUTION, SAFETY, AND
+              RELIABILITY
             </motion.h1>
 
             <p className="sr-only">
-              ACHI Scaffolding is an industrial and construction scaffolding contractor and equipment provider delivering access systems, shoring, and scaffolding solutions for restoration, infrastructure, and complex building projects.
+              ACHI Scaffolding is an industrial and construction scaffolding
+              contractor and equipment provider delivering access systems,
+              shoring, and scaffolding solutions for restoration, infrastructure,
+              and complex building projects.
             </p>
 
             <motion.p
@@ -132,7 +139,10 @@ const About = () => {
               viewport={{ once: true }}
               className="text-[#4a5c7a] text-[16px] leading-[1.7] mt-[12px]"
             >
-              ACHI Scaffolding operates at the intersection of construction execution and access engineering. We provide scaffolding systems that are designed to meet real-world site conditions — not idealized drawings.
+              ACHI Scaffolding operates at the intersection of construction
+              execution and access engineering. We provide scaffolding systems
+              that are designed to meet real-world site conditions — not
+              idealized drawings.
             </motion.p>
 
             <motion.ul
@@ -154,7 +164,9 @@ const About = () => {
               viewport={{ once: true }}
               className="text-[#4a5c7a] text-[16px] leading-[1.7] mt-[12px]"
             >
-              We focus on doing fewer things better, ensuring every system we deliver is safe, compliant, and adapted to the project’s operational reality.
+              We focus on doing fewer things better, ensuring every system we
+              deliver is safe, compliant, and adapted to the project’s
+              operational reality.
             </motion.p>
           </div>
 
