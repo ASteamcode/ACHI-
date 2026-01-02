@@ -22,7 +22,13 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# gallery images (do NOT track in git)
-public/assets/gallery/*
-# gallery images (too large for normal git push)
-public/assets/gallery/*
+# --------------------------------------------------
+# Assets handling
+# --------------------------------------------------
+
+# Ignore all assets by default
+/public/assets/*
+
+# BUT allow gallery images (tracked via Git LFS for GitHub Pages)
+!/public/assets/gallery/
+!/public/assets/gallery/**
