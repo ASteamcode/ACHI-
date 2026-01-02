@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Home from '../pages/Home'
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import LangRouter, { useLangRouter } from '../routing/LangRouter'
+import RouteSeo from '../seo/RouteSeo'
+import { normalizeTrailingSlash } from '../seo/urlNormalizer'
+import { initMixedContentGuard } from '../seo/mixedContentGuard'
 
 import 'glider-js/glider.min.css'
 import "slick-carousel/slick/slick.css"
@@ -27,9 +30,23 @@ import Sectors from '../pages/Sectors'
 function AppRoutesInner({ showMenu, setshowMenu, handleLanguage, currentLanguage, handleCountry, currentCountry }) {
   const { i18n } = useTranslation()
   const { cleanLocation } = useLangRouter()
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  // Optional: Normalize trailing slash on mount (single-hop redirect)
+  useEffect(() => {
+    // Only normalize if pathname is different from normalized version
+    // This is a safe, single-hop redirect that doesn't change route meaning
+    normalizeTrailingSlash(navigate, location.pathname)
+    
+    // Initialize mixed content guard (dev-only)
+    initMixedContentGuard()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Only run once on mount - navigate and location.pathname are stable
 
   return (
     <>
+      <RouteSeo />
       <ScrollToTop />
       <div className="App" onClick={() => showMenu ? setshowMenu(false) : true}>
         <Header

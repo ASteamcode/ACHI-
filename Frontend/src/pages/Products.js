@@ -1,132 +1,354 @@
 // src/pages/Products.js
-import React, { useEffect, useMemo, useState, useRef } from "react"
+import React, { useEffect, useMemo, useState, useRef, useCallback } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import * as THREE from "three"
 import SEO from "../components/SEO"
 
-// Helper component to maintain camera position and handle AR View toggle smoothly
-const ModelViewerController = ({ viewerRef, isARView, cameraOrbit, cameraTarget, productIdx }) => {
+const Products = () => {
+  // Modal state for AR View
+  const [isAROpen, setIsAROpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState(null)
+  // Store refs for inline model-viewer elements (non-interactive)
+  const modelViewerRefs = useRef({})
+  // Store ref for modal model-viewer (interactive)
+  const modalViewerRef = useRef(null)
+
+  const openARModal = useCallback((product, productIdx) => {
+    setSelectedProduct(product)
+    setIsAROpen(true)
+    // Lock body scroll
+    document.body.style.overflow = "hidden"
+    
+    // Pre-initialize modal viewer with camera settings from inline viewer if available
+    setTimeout(() => {
+      const inlineViewer = modelViewerRefs.current[productIdx]
+      if (inlineViewer && modalViewerRef.current) {
+        try {
+          // Copy camera settings from inline viewer to ensure consistency
+          const cameraOrbit = inlineViewer.getAttribute("camera-orbit") || product?.cameraOrbit || "0deg 70deg 120%"
+          const cameraTarget = inlineViewer.getAttribute("camera-target") || product?.cameraTarget || "0m 0m 0m"
+          
+          modalViewerRef.current.setAttribute("camera-orbit", cameraOrbit)
+          modalViewerRef.current.setAttribute("camera-target", cameraTarget)
+          modalViewerRef.current.cameraOrbit = cameraOrbit
+          modalViewerRef.current.cameraTarget = cameraTarget
+          
+          // Ensure visibility
+          modalViewerRef.current.style.opacity = "1"
+          modalViewerRef.current.style.visibility = "visible"
+          
+          // Update framing to ensure model is visible
+          if (typeof modalViewerRef.current.updateFraming === "function") {
+            modalViewerRef.current.updateFraming()
+          }
+        } catch (e) {
+          // Ignore errors
+        }
+      }
+    }, 50)
+  }, [])
+
+  const closeARModal = useCallback(() => {
+    setIsAROpen(false)
+    setSelectedProduct(null)
+    // Restore body scroll
+    document.body.style.overflow = ""
+    // Dispose modal viewer controls when closing
+    if (modalViewerRef.current) {
+      try {
+        modalViewerRef.current.removeAttribute("camera-controls")
+      } catch (e) {
+        // Ignore errors
+      }
+    }
+  }, [])
+
+  // Handle ESC key to close modal
   useEffect(() => {
-    if (!viewerRef) return
+    if (!isAROpen) return
+    
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        closeARModal()
+      }
+    }
+    window.addEventListener("keydown", handleEsc)
+    return () => window.removeEventListener("keydown", handleEsc)
+  }, [isAROpen, closeARModal])
 
-    // Lock camera position before making any changes
-    const lockCameraPosition = () => {
-      try {
-        if (cameraOrbit) {
-          viewerRef.setAttribute("camera-orbit", cameraOrbit)
-          viewerRef.cameraOrbit = cameraOrbit
+  // Ensure modal viewer is properly centered using bounding box math
+  useEffect(() => {
+    if (!isAROpen || !selectedProduct || !modalViewerRef.current) return
+
+    const viewer = modalViewerRef.current
+
+    // Center the canvas in shadowRoot - ensure it fills the modal area
+    const centerCanvas = () => {
+      if (viewer.shadowRoot) {
+        const containerDiv = viewer.shadowRoot.querySelector("div.container")
+        if (containerDiv) {
+          containerDiv.style.width = "100%"
+          containerDiv.style.height = "100%"
+          containerDiv.style.margin = "0"
+          containerDiv.style.padding = "0"
+          containerDiv.style.position = "absolute"
+          containerDiv.style.top = "0"
+          containerDiv.style.left = "0"
+          containerDiv.style.right = "0"
+          containerDiv.style.bottom = "0"
         }
-        if (cameraTarget) {
-          viewerRef.setAttribute("camera-target", cameraTarget)
-          viewerRef.cameraTarget = cameraTarget
+
+        const canvas = viewer.shadowRoot.querySelector("canvas")
+        if (canvas) {
+          canvas.style.width = "100%"
+          canvas.style.height = "100%"
+          canvas.style.display = "block"
+          canvas.style.margin = "0"
+          canvas.style.padding = "0"
+        }
+
+        // Also handle slot canvas if it exists
+        const slotCanvas = viewer.shadowRoot.querySelector("slot canvas") || 
+                          viewer.shadowRoot.querySelector("canvas")
+        if (slotCanvas) {
+          slotCanvas.style.width = "100%"
+          slotCanvas.style.height = "100%"
+          slotCanvas.style.display = "block"
+          slotCanvas.style.margin = "0"
+        }
+      }
+    }
+
+    // ALWAYS set default camera settings first to ensure model is visible
+    const setDefaultCamera = () => {
+      try {
+        const baseOrbit = selectedProduct?.cameraOrbit || "0deg 70deg 120%"
+        const cameraTarget = "0m 0m 0m"
+        
+        viewer.setAttribute("camera-orbit", baseOrbit)
+        viewer.setAttribute("camera-target", cameraTarget)
+        viewer.cameraOrbit = baseOrbit
+        viewer.cameraTarget = cameraTarget
+        
+        // Ensure visibility
+        viewer.style.opacity = "1"
+        viewer.style.visibility = "visible"
+        
+        // Call updateFraming() to ensure model is visible
+        if (typeof viewer.updateFraming === "function") {
+          viewer.updateFraming()
         }
       } catch (e) {
         // Ignore errors
       }
     }
 
-    // Update camera-controls attributes directly via DOM
-    const updateAttributes = () => {
+    // Set default camera immediately
+    setDefaultCamera()
+
+    // Robust centering using TRUE center alignment (not grounding)
+    const centerAndFrameModel = () => {
+      if (!viewer || !viewer.isConnected) {
+        // If centering fails, ensure default camera is set
+        setDefaultCamera()
+        return
+      }
+
       try {
-        // Lock camera position FIRST and MULTIPLE times to prevent any movement
-        lockCameraPosition()
-        
-        if (isARView) {
-          // Enable camera-controls for interactive mode
-          viewerRef.setAttribute("camera-controls", "")
-          viewerRef.removeAttribute("auto-rotate")
-          viewerRef.removeAttribute("auto-rotate-delay")
-          viewerRef.removeAttribute("rotation-per-second")
-          viewerRef.style.pointerEvents = "auto"
-          viewerRef.style.touchAction = "none"
+        // Wait for scene and model to be available
+        if (!viewer.scene || !viewer.model) {
+          // If scene/model not ready, use default camera
+          setDefaultCamera()
+          return
+        }
+
+        const scene = viewer.scene
+        const model = viewer.model
+
+        // Find the root model object (the GLTF scene or main group)
+        let rootModelObject = null
+        scene.traverse((child) => {
+          // Find the top-level group that contains the model
+          if (child.type === "Group" && child.parent === scene) {
+            rootModelObject = child
+          } else if (child.type === "Mesh" && !rootModelObject) {
+            // If no group found, use the first mesh's parent or the mesh itself
+            rootModelObject = child.parent === scene ? child : child.parent
+          }
+        })
+
+        // If we can't find a specific object, use the scene's first child or scene itself
+        if (!rootModelObject) {
+          if (scene.children.length > 0) {
+            rootModelObject = scene.children[0]
+          } else {
+            rootModelObject = scene
+          }
+        }
+
+        // Compute bounding box from the FINAL rendered object
+        const box = new THREE.Box3().setFromObject(rootModelObject)
+        const center = new THREE.Vector3()
+        const size = new THREE.Vector3()
+        box.getCenter(center)  // TRUE center, not minY
+        box.getSize(size)
+
+        // IMPORTANT: Recenter to world origin using TRUE center (NOT minY grounding)
+        // Move the model by subtracting the center to bring it to (0,0,0)
+        // Compute the offset needed: current position - center = new position at origin
+        if (rootModelObject.parent && rootModelObject.parent !== scene) {
+          // If there's a parent wrapper, move the parent
+          rootModelObject.parent.position.set(
+            rootModelObject.parent.position.x - center.x,
+            rootModelObject.parent.position.y - center.y,
+            rootModelObject.parent.position.z - center.z
+          )
         } else {
-          // Default state: auto-rotate enabled, no interaction
-          viewerRef.removeAttribute("camera-controls")
-          viewerRef.setAttribute("auto-rotate", "")
-          viewerRef.setAttribute("auto-rotate-delay", "0")
-          viewerRef.setAttribute("rotation-per-second", "28deg")
-          viewerRef.style.pointerEvents = "none"
-          viewerRef.style.touchAction = "pan-y"
+          // Move the model itself to center it at origin
+          rootModelObject.position.set(
+            rootModelObject.position.x - center.x,
+            rootModelObject.position.y - center.y,
+            rootModelObject.position.z - center.z
+          )
         }
+
+        // Compute camera fit distance using proper FOV math
+        const maxDim = Math.max(size.x, size.y, size.z)
+        const camera = viewer.getCamera ? viewer.getCamera() : null
+        const fovDegrees = camera ? camera.fov : 30
+        const fovRad = THREE.MathUtils.degToRad(fovDegrees)
+        const aspect = camera ? camera.aspect : 1
         
-        // Lock camera position again immediately after attribute changes
-        lockCameraPosition()
-        
-        // DO NOT call updateFraming() when toggling - it causes buffering/rotation
-        // The camera position is already set correctly, so no need to reframe
+        // Compute fit distances for both height and width
+        const fitHeightDistance = (maxDim / 2) / Math.tan(fovRad / 2)
+        const fitWidthDistance = fitHeightDistance / aspect
+        const baseDistance = Math.max(fitHeightDistance, fitWidthDistance)
+        const padding = 1.3 // Padding factor
+        const distance = padding * baseDistance
+
+        // Convert distance to model-viewer's camera-orbit percentage format
+        const baseDistancePercent = maxDim * 1.2
+        const orbitDistancePercent = Math.max(120, Math.min(300, (distance / baseDistancePercent) * 100))
+
+        // Get base camera angles from product or use defaults
+        const baseOrbit = selectedProduct?.cameraOrbit || "0deg 70deg 120%"
+        const orbitMatch = baseOrbit.match(/(\d+deg)\s+(\d+deg)\s+(\d+)%/)
+        const azimuth = orbitMatch ? orbitMatch[1] : "0deg"
+        const polar = orbitMatch ? orbitMatch[2] : "70deg"
+
+        // Set camera-orbit with computed distance
+        const cameraOrbit = `${azimuth} ${polar} ${Math.round(orbitDistancePercent)}%`
+        const cameraTarget = "0m 0m 0m"  // MUST be at origin after recentering
+
+                        viewer.setAttribute("camera-orbit", cameraOrbit)
+                        viewer.setAttribute("camera-target", cameraTarget)
+                        viewer.cameraOrbit = cameraOrbit
+                        viewer.cameraTarget = cameraTarget
+
+                        // Call updateFraming() to ensure model is visible, then immediately re-center
+                        // We'll re-center after a short delay to override any grounding
+                        if (typeof viewer.updateFraming === "function") {
+                          viewer.updateFraming()
+                          // Re-center after updateFraming to prevent grounding
+                          setTimeout(() => {
+                            if (rootModelObject && viewer.scene) {
+                              const box2 = new THREE.Box3().setFromObject(rootModelObject)
+                              const center2 = new THREE.Vector3()
+                              box2.getCenter(center2)
+                              
+                              if (rootModelObject.parent && rootModelObject.parent !== scene) {
+                                rootModelObject.parent.position.set(
+                                  rootModelObject.parent.position.x - center2.x,
+                                  rootModelObject.parent.position.y - center2.y,
+                                  rootModelObject.parent.position.z - center2.z
+                                )
+                              } else {
+                                rootModelObject.position.set(
+                                  rootModelObject.position.x - center2.x,
+                                  rootModelObject.position.y - center2.y,
+                                  rootModelObject.position.z - center2.z
+                                )
+                              }
+                              
+                              // Re-set camera target to ensure it stays centered
+                              viewer.setAttribute("camera-target", "0m 0m 0m")
+                              viewer.cameraTarget = "0m 0m 0m"
+                            }
+                          }, 50)
+                        }
+
+                        // Ensure canvas is properly sized
+                        centerCanvas()
       } catch (e) {
-        // Ignore errors
+        console.warn("Error centering model:", e)
+        // Fallback to default settings - ALWAYS ensure model is visible
+        setDefaultCamera()
       }
     }
 
-    // Use requestAnimationFrame for smooth updates
-    const rafId = requestAnimationFrame(() => {
-      updateAttributes()
-      
-      // Lock camera position again after a brief delay to ensure it stays locked
+    // Initialize canvas centering immediately
+    centerCanvas()
+
+    // Wait for model to load, then center and frame
+    const handleModelLoad = () => {
       setTimeout(() => {
-        if (viewerRef && viewerRef.isConnected) {
-          lockCameraPosition()
-          // DO NOT call updateFraming() - it causes unwanted movement
-        }
-      }, 50)
-    })
+        // Always ensure default camera first
+        setDefaultCamera()
+        centerCanvas()
+        // Then try to center and frame
+        centerAndFrameModel()
+      }, 100)
+    }
+
+    // Initialize immediately
+    centerCanvas()
+    setDefaultCamera()
+
+    // Also try after delays to ensure it works - always set default first
+    const timeout1 = setTimeout(() => {
+      setDefaultCamera()
+      handleModelLoad()
+    }, 200)
+    const timeout2 = setTimeout(() => {
+      setDefaultCamera()
+      handleModelLoad()
+    }, 500)
+    const timeout3 = setTimeout(() => {
+      setDefaultCamera()
+      handleModelLoad()
+    }, 1000)
+
+    // If model is already loaded, initialize now
+    if (viewer.loaded) {
+      setDefaultCamera()
+      handleModelLoad()
+    } else {
+      // Wait for model to load
+      viewer.addEventListener("load", () => {
+        setDefaultCamera()
+        handleModelLoad()
+      }, { once: true })
+    }
+
+    // Handle resize to maintain centering
+    const handleResize = () => {
+      centerCanvas()
+      centerAndFrameModel()
+    }
+    window.addEventListener("resize", handleResize)
 
     return () => {
-      cancelAnimationFrame(rafId)
+      clearTimeout(timeout1)
+      clearTimeout(timeout2)
+      clearTimeout(timeout3)
+      window.removeEventListener("resize", handleResize)
     }
-  }, [viewerRef, isARView, cameraOrbit, cameraTarget, productIdx])
+  }, [isAROpen, selectedProduct])
 
-  return null
-}
-
-const Products = () => {
-  // Track AR View state for each product card
-  const [arViewStates, setARViewStates] = useState({})
-  // Store refs for model-viewer elements
-  const modelViewerRefs = useRef({})
-
-  const toggleARView = (productIdx, product) => {
-    // Lock camera position BEFORE state change to prevent flicker
-    const viewer = modelViewerRefs.current[productIdx]
-    if (viewer) {
-      try {
-        // Get camera settings from the product or use defaults
-        const cameraOrbit = product?.cameraOrbit || "0deg 70deg 120%"
-        const cameraTarget = product?.cameraTarget || "0m 0m 0m"
-        
-        // Lock camera position synchronously before any state changes
-        // Set multiple times to prevent any interpolation/buffering
-        viewer.setAttribute("camera-orbit", cameraOrbit)
-        viewer.setAttribute("camera-target", cameraTarget)
-        viewer.cameraOrbit = cameraOrbit
-        viewer.cameraTarget = cameraTarget
-        
-        // Lock again immediately to prevent any movement
-        viewer.setAttribute("camera-orbit", cameraOrbit)
-        viewer.setAttribute("camera-target", cameraTarget)
-        viewer.cameraOrbit = cameraOrbit
-        viewer.cameraTarget = cameraTarget
-        
-        // Ensure model stays visible
-        viewer.style.opacity = "1"
-        
-        // DO NOT call updateFraming() when toggling - it causes buffering/rotation
-        // The camera is already positioned correctly, so no reframing needed
-      } catch (e) {
-        // Ignore errors
-      }
-    }
-
-    // Update state after camera is locked
-    setARViewStates((prev) => ({
-      ...prev,
-      [productIdx]: !prev[productIdx],
-    }))
-  }
-
-  // Ensure ALL model-viewers maintain their camera positions and stay visible
+  // Ensure ALL inline model-viewers maintain their camera positions and stay visible (non-interactive)
   useEffect(() => {
     const ensureAllCamerasVisible = () => {
-      // Iterate through ALL model-viewers, not just ones in AR View
+      // Iterate through ALL inline model-viewers (always non-interactive)
       Object.keys(modelViewerRefs.current).forEach((idx) => {
         const viewer = modelViewerRefs.current[idx]
         if (!viewer) return
@@ -141,6 +363,14 @@ const Products = () => {
           viewer.setAttribute("camera-target", cameraTarget)
           viewer.cameraOrbit = cameraOrbit
           viewer.cameraTarget = cameraTarget
+          
+          // Ensure non-interactive state (auto-rotate only, no pointer events)
+          viewer.removeAttribute("camera-controls")
+          viewer.setAttribute("auto-rotate", "")
+          viewer.setAttribute("auto-rotate-delay", "0")
+          viewer.setAttribute("rotation-per-second", "28deg")
+          viewer.style.pointerEvents = "none"
+          viewer.style.touchAction = "pan-y"
           
           // Ensure visibility
           viewer.style.opacity = "1"
@@ -162,7 +392,7 @@ const Products = () => {
       clearTimeout(timeout1)
       clearTimeout(timeout2)
     }
-  }, [arViewStates])
+  }, [])
   useEffect(() => {
     if (!document.querySelector('script[data-model-viewer="true"]')) {
       const s = document.createElement("script")
@@ -568,6 +798,18 @@ const Products = () => {
         model-viewer::part(controls) { display: none !important; }
         model-viewer::part(overlay) { display: none !important; }
         model-viewer::part(interaction-prompt) { display: none !important; }
+        
+        /* Modal-specific styling for centered 3D model */
+        [data-modal-viewer] {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+        }
+        [data-modal-viewer]::part(default-container) {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+        }
       `}</style>
 
       <section className="py-[60px]">
@@ -592,7 +834,6 @@ const Products = () => {
        <div className="w-[90%] max-w-[1200px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[18px]">
           {products.map((p, idx) => {
-            const isARView = arViewStates[idx] || false
             const is3DProduct = p.type === "3d"
 
       return (
@@ -604,75 +845,67 @@ const Products = () => {
         >
           <div className="relative overflow-hidden bg-white" style={{ width: "100%", minHeight: "380px" }}>
             {is3DProduct ? (
-              <>
-                <model-viewer
-                  ref={(el) => {
-                    if (el) {
-                      modelViewerRefs.current[idx] = el
-                      const cameraOrbit = p.cameraOrbit || "0deg 70deg 120%"
-                      const cameraTarget = p.cameraTarget || "0m 0m 0m"
+              <model-viewer
+                ref={(el) => {
+                  if (el) {
+                    modelViewerRefs.current[idx] = el
+                    const cameraOrbit = p.cameraOrbit || "0deg 70deg 120%"
+                    const cameraTarget = p.cameraTarget || "0m 0m 0m"
 
-                      el.setAttribute("camera-orbit", cameraOrbit)
-                      el.setAttribute("camera-target", cameraTarget)
-                      el.cameraOrbit = cameraOrbit
-                      el.cameraTarget = cameraTarget
+                    el.setAttribute("camera-orbit", cameraOrbit)
+                    el.setAttribute("camera-target", cameraTarget)
+                    el.cameraOrbit = cameraOrbit
+                    el.cameraTarget = cameraTarget
 
-                      el.removeAttribute("camera-controls")
-                      el.setAttribute("auto-rotate", "")
-                      el.setAttribute("auto-rotate-delay", "0")
-                      el.setAttribute("rotation-per-second", "28deg")
-                      el.style.pointerEvents = "none"
-                      el.style.touchAction = "pan-y"
-                      el.style.opacity = "1"
-                      el.style.visibility = "visible"
+                    // Always non-interactive: auto-rotate only, no pointer events
+                    el.removeAttribute("camera-controls")
+                    el.setAttribute("auto-rotate", "")
+                    el.setAttribute("auto-rotate-delay", "0")
+                    el.setAttribute("rotation-per-second", "28deg")
+                    el.style.pointerEvents = "none"
+                    el.style.touchAction = "pan-y"
+                    el.style.opacity = "1"
+                    el.style.visibility = "visible"
 
-                      if (typeof el.updateFraming === "function") {
-                        const handleLoad = () => {
-                          if (el && el.isConnected) el.updateFraming()
-                        }
-                        if (el.loaded) {
-                          setTimeout(handleLoad, 100)
-                        } else {
-                          el.addEventListener("load", handleLoad, { once: true })
-                        }
+                    if (typeof el.updateFraming === "function") {
+                      const handleLoad = () => {
+                        if (el && el.isConnected) el.updateFraming()
+                      }
+                      if (el.loaded) {
+                        setTimeout(handleLoad, 100)
+                      } else {
+                        el.addEventListener("load", handleLoad, { once: true })
                       }
                     }
-                  }}
-                  key={`${p.model}-${idx}-${p.cameraOrbit}-${p.cameraTarget}-${p.fieldOfView}`}
-                  src={p.model}
-                  alt={p.title}
-                  interaction-prompt="none"
-                  shadow-intensity="1"
-                  loading="eager"
-                  auto-rotate
-                  auto-rotate-delay="0"
-                  rotation-per-second="28deg"
-                  camera-orbit={p.cameraOrbit || "0deg 70deg 120%"}
-                  camera-target={p.cameraTarget || "0m 0m 0m"}
-                  field-of-view={p.fieldOfView || "30deg"}
-                  min-field-of-view="20deg"
-                  max-field-of-view="60deg"
-                  bounds="tight"
-                  ar-modes="webxr scene-viewer quick-look"
-                  class="absolute inset-0 w-full h-full block"
-                  style={{
-                    margin: 0,
-                    padding: 0,
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    pointerEvents: "none",
-                  }}
-                />
-                <ModelViewerController
-                  viewerRef={modelViewerRefs.current[idx]}
-                  isARView={isARView}
-                  cameraOrbit={p.cameraOrbit || "0deg 70deg 120%"}
-                  cameraTarget={p.cameraTarget || "0m 0m 0m"}
-                  productIdx={idx}
-                />
-              </>
+                  }
+                }}
+                key={`${p.model}-${idx}-${p.cameraOrbit}-${p.cameraTarget}-${p.fieldOfView}`}
+                src={p.model}
+                alt={p.title}
+                interaction-prompt="none"
+                shadow-intensity="1"
+                loading="eager"
+                auto-rotate
+                auto-rotate-delay="0"
+                rotation-per-second="28deg"
+                camera-orbit={p.cameraOrbit || "0deg 70deg 120%"}
+                camera-target={p.cameraTarget || "0m 0m 0m"}
+                field-of-view={p.fieldOfView || "30deg"}
+                min-field-of-view="20deg"
+                max-field-of-view="60deg"
+                bounds="tight"
+                ar-modes="webxr scene-viewer quick-look"
+                class="absolute inset-0 w-full h-full block"
+                style={{
+                  margin: 0,
+                  padding: 0,
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  pointerEvents: "none",
+                }}
+              />
             ) : (
               <img
                 src={p.img}
@@ -687,13 +920,13 @@ const Products = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation()
-                  toggleARView(idx, p)
+                  openARModal(p, idx)
                 }}
                 className="absolute top-[12px] left-[12px] bg-[#214f9b] text-white text-[12px] font-[900] px-[10px] py-[6px] rounded-full z-20 hover:bg-[#1a3d7a] transition-colors duration-200 cursor-pointer"
-                aria-label={isARView ? "Exit AR View" : "Enter AR View"}
+                aria-label="Open AR View"
                 type="button"
               >
-                {isARView ? "EXIT AR VIEW" : "AR VIEW"}
+                AR VIEW
               </button>
             )}
 
@@ -703,45 +936,44 @@ const Products = () => {
               </span>
             )}
 
-            {!isARView && (
-              <div className="absolute inset-0 pointer-events-none">
-                <div
-                  className="absolute inset-x-0 bottom-0 p-[16px] md:p-[18px]
-                             bg-gradient-to-t from-black/80 via-black/35 to-transparent
-                             opacity-0 translate-y-[10px]
-                             group-hover:opacity-100 group-hover:translate-y-0
-                             transition-all duration-300 ease-out"
-                >
-                  <div className="pointer-events-auto max-w-[92%]">
-                    <p className="text-white text-[14px] leading-[1.7] mb-[12px]" itemProp="description">
-                      {p.desc}
-                    </p>
+            {/* Hover info overlay - always shown when not hovering AR button */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div
+                className="absolute inset-x-0 bottom-0 p-[16px] md:p-[18px]
+                           bg-gradient-to-t from-black/80 via-black/35 to-transparent
+                           opacity-0 translate-y-[10px]
+                           group-hover:opacity-100 group-hover:translate-y-0
+                           transition-all duration-300 ease-out"
+              >
+                <div className="pointer-events-auto max-w-[92%]">
+                  <p className="text-white text-[14px] leading-[1.7] mb-[12px]" itemProp="description">
+                    {p.desc}
+                  </p>
 
-                    <ul className="space-y-[6px] text-[13px] text-white">
-                      {(p.specs || []).map((s) => (
-                        <li key={`${p.title}-${s}`} className="flex gap-[8px]">
-                          <span aria-hidden="true" className="mt-[6px] w-[6px] h-[6px] rounded-full bg-white" />
-                          <span className="leading-[1.6]">{s}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  <ul className="space-y-[6px] text-[13px] text-white">
+                    {(p.specs || []).map((s) => (
+                      <li key={`${p.title}-${s}`} className="flex gap-[8px]">
+                        <span aria-hidden="true" className="mt-[6px] w-[6px] h-[6px] rounded-full bg-white" />
+                        <span className="leading-[1.6]">{s}</span>
+                      </li>
+                    ))}
+                  </ul>
 
-                    {p.type === "img" && (
-                      <button
-                        type="button"
-                        className="mt-[12px] inline-flex w-full justify-center rounded-[12px] px-[14px] py-[10px]
-                                   border-2 border-white text-white font-[900] uppercase text-[13px]
-                                   hover:bg-white hover:text-[#214f9b] transition-all"
-                        aria-label={`Request specifications for ${p.title}`}
-                        onClick={() => window.open("https://wa.me/96103322811", "_blank", "noopener,noreferrer")}
-                      >
-                        Request Specs
-                      </button>
-                    )}
-                  </div>
+                  {p.type === "img" && (
+                    <button
+                      type="button"
+                      className="mt-[12px] inline-flex w-full justify-center rounded-[12px] px-[14px] py-[10px]
+                                 border-2 border-white text-white font-[900] uppercase text-[13px]
+                                 hover:bg-white hover:text-[#214f9b] transition-all"
+                      aria-label={`Request specifications for ${p.title}`}
+                      onClick={() => window.open("https://wa.me/96103322811", "_blank", "noopener,noreferrer")}
+                    >
+                      Request Specs
+                    </button>
+                  )}
                 </div>
               </div>
-            )}
+            </div>
           </div>
 
           <h3
@@ -763,7 +995,7 @@ const Products = () => {
           <div className="text-center md:text-left">
             <h2 className="text-[#214f9b] font-[900] uppercase text-[22px] md:text-[28px]">Need a Quote for Your Next Project?</h2>
             <p className="mt-[8px] text-[#4a5c7a] text-[14px] leading-[1.7]">
-              Share your project details and we’ll recommend the best system for your needs.
+              Share your project details and we'll recommend the best system for your needs.
             </p>
           </div>
 
@@ -777,6 +1009,344 @@ const Products = () => {
           </a>
         </div>
       </section>
+
+      {/* AR View Modal */}
+      <AnimatePresence>
+        {isAROpen && selectedProduct && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[999999] bg-black/70 flex items-center justify-center px-[16px] py-[16px]"
+            onClick={closeARModal}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`3D View: ${selectedProduct.title}`}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="relative w-full max-w-[90vw] h-[90vh] max-h-[800px] bg-white rounded-[18px] overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.35)] flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={closeARModal}
+                className="absolute top-[14px] right-[14px] z-[1000000] w-[42px] h-[42px] rounded-full bg-white shadow-[0_10px_25px_rgba(0,0,0,0.18)] text-[#0f172a] text-[26px] leading-[26px] flex items-center justify-center hover:bg-[#f1f5f9] transition-colors duration-200"
+                aria-label="Close 3D View"
+              >
+                ×
+              </button>
+
+              {/* Interactive 3D Model Viewer */}
+              <model-viewer
+                data-modal-viewer="true"
+                ref={(el) => {
+                  if (el) {
+                    modalViewerRef.current = el
+
+                    // Center the model-viewer element itself
+                    el.style.width = "100%"
+                    el.style.height = "100%"
+                    el.style.display = "block"
+                    el.style.margin = "0"
+                    el.style.padding = "0"
+                    el.style.position = "absolute"
+                    el.style.top = "0"
+                    el.style.left = "0"
+                    el.style.right = "0"
+                    el.style.bottom = "0"
+
+                    // Enable full interaction
+                    el.setAttribute("camera-controls", "")
+                    el.removeAttribute("auto-rotate")
+                    el.removeAttribute("auto-rotate-delay")
+                    el.removeAttribute("rotation-per-second")
+                    el.style.pointerEvents = "auto"
+                    el.style.touchAction = "none"
+                    el.style.opacity = "1"
+                    el.style.visibility = "visible"
+
+                    // ALWAYS set default camera settings first to ensure model is visible
+                    const setDefaultCamera = () => {
+                      try {
+                        const baseOrbit = selectedProduct?.cameraOrbit || "0deg 70deg 120%"
+                        const cameraTarget = "0m 0m 0m"
+                        
+                        el.setAttribute("camera-orbit", baseOrbit)
+                        el.setAttribute("camera-target", cameraTarget)
+                        el.cameraOrbit = baseOrbit
+                        el.cameraTarget = cameraTarget
+                        
+                        // Ensure visibility
+                        el.style.opacity = "1"
+                        el.style.visibility = "visible"
+                        
+                        // Call updateFraming() to ensure model is visible, then we'll re-center it
+                        if (typeof el.updateFraming === "function") {
+                          el.updateFraming()
+                        }
+                      } catch (e) {
+                        // Ignore errors
+                      }
+                    }
+
+                    // Set default camera immediately
+                    setDefaultCamera()
+
+                    // Robust centering function using TRUE center alignment (not grounding)
+                    const centerAndFrameModel = () => {
+                      if (!el || !el.isConnected) {
+                        // If centering fails, ensure default camera is set
+                        setDefaultCamera()
+                        return
+                      }
+
+                      try {
+                        // Wait for scene and model to be available
+                        if (!el.scene || !el.model) {
+                          // If scene/model not ready, use default camera
+                          setDefaultCamera()
+                          return
+                        }
+
+                        const scene = el.scene
+                        const model = el.model
+
+                        // Find the root model object (the GLTF scene or main group)
+                        let rootModelObject = null
+                        scene.traverse((child) => {
+                          // Find the top-level group that contains the model
+                          if (child.type === "Group" && child.parent === scene) {
+                            rootModelObject = child
+                          } else if (child.type === "Mesh" && !rootModelObject) {
+                            // If no group found, use the first mesh's parent or the mesh itself
+                            rootModelObject = child.parent === scene ? child : child.parent
+                          }
+                        })
+
+                        // If we can't find a specific object, use the scene's first child or scene itself
+                        if (!rootModelObject) {
+                          if (scene.children.length > 0) {
+                            rootModelObject = scene.children[0]
+                          } else {
+                            rootModelObject = scene
+                          }
+                        }
+
+                        // Compute bounding box from the FINAL rendered object
+                        const box = new THREE.Box3().setFromObject(rootModelObject)
+                        const center = new THREE.Vector3()
+                        const size = new THREE.Vector3()
+                        box.getCenter(center)  // TRUE center, not minY
+                        box.getSize(size)
+
+                        // IMPORTANT: Recenter to world origin using TRUE center (NOT minY grounding)
+                        // Move the model by subtracting the center to bring it to (0,0,0)
+                        // Compute the offset needed: current position - center = new position at origin
+                        const currentPos = rootModelObject.position.clone()
+                        const offset = currentPos.sub(center)
+                        
+                        if (rootModelObject.parent && rootModelObject.parent !== scene) {
+                          // If there's a parent wrapper, move the parent
+                          rootModelObject.parent.position.set(
+                            rootModelObject.parent.position.x - center.x,
+                            rootModelObject.parent.position.y - center.y,
+                            rootModelObject.parent.position.z - center.z
+                          )
+                        } else {
+                          // Move the model itself to center it at origin
+                          rootModelObject.position.set(
+                            rootModelObject.position.x - center.x,
+                            rootModelObject.position.y - center.y,
+                            rootModelObject.position.z - center.z
+                          )
+                        }
+
+                        // Compute camera fit distance using proper FOV math
+                        const maxDim = Math.max(size.x, size.y, size.z)
+                        const camera = el.getCamera ? el.getCamera() : null
+                        const fovDegrees = camera ? camera.fov : 30
+                        const fovRad = THREE.MathUtils.degToRad(fovDegrees)
+                        const aspect = camera ? camera.aspect : 1
+                        
+                        // Compute fit distances for both height and width
+                        const fitHeightDistance = (maxDim / 2) / Math.tan(fovRad / 2)
+                        const fitWidthDistance = fitHeightDistance / aspect
+                        const baseDistance = Math.max(fitHeightDistance, fitWidthDistance)
+                        const padding = 1.3 // Padding factor
+                        const distance = padding * baseDistance
+
+                        // Convert distance to model-viewer's camera-orbit percentage format
+                        // model-viewer uses percentage relative to model size
+                        const baseDistancePercent = maxDim * 1.2
+                        const orbitDistancePercent = Math.max(120, Math.min(300, (distance / baseDistancePercent) * 100))
+
+                        // Get base camera angles from product or use defaults
+                        const baseOrbit = selectedProduct?.cameraOrbit || "0deg 70deg 120%"
+                        const orbitMatch = baseOrbit.match(/(\d+deg)\s+(\d+deg)\s+(\d+)%/)
+                        const azimuth = orbitMatch ? orbitMatch[1] : "0deg"
+                        const polar = orbitMatch ? orbitMatch[2] : "70deg"
+
+                        // Set camera-orbit with computed distance
+                        const cameraOrbit = `${azimuth} ${polar} ${Math.round(orbitDistancePercent)}%`
+                        const cameraTarget = "0m 0m 0m"  // MUST be at origin after recentering
+
+                        el.setAttribute("camera-orbit", cameraOrbit)
+                        el.setAttribute("camera-target", cameraTarget)
+                        el.cameraOrbit = cameraOrbit
+                        el.cameraTarget = cameraTarget
+
+                        // Call updateFraming() to ensure model is visible, then immediately re-center
+                        // We'll re-center after a short delay to override any grounding
+                        if (typeof el.updateFraming === "function") {
+                          el.updateFraming()
+                          // Re-center after updateFraming to prevent grounding
+                          setTimeout(() => {
+                            if (rootModelObject && el.scene) {
+                              const box2 = new THREE.Box3().setFromObject(rootModelObject)
+                              const center2 = new THREE.Vector3()
+                              box2.getCenter(center2)
+                              
+                              if (rootModelObject.parent && rootModelObject.parent !== scene) {
+                                rootModelObject.parent.position.set(
+                                  rootModelObject.parent.position.x - center2.x,
+                                  rootModelObject.parent.position.y - center2.y,
+                                  rootModelObject.parent.position.z - center2.z
+                                )
+                              } else {
+                                rootModelObject.position.set(
+                                  rootModelObject.position.x - center2.x,
+                                  rootModelObject.position.y - center2.y,
+                                  rootModelObject.position.z - center2.z
+                                )
+                              }
+                              
+                              // Re-set camera target to ensure it stays centered
+                              el.setAttribute("camera-target", "0m 0m 0m")
+                              el.cameraTarget = "0m 0m 0m"
+                            }
+                          }, 50)
+                        }
+
+                        // Ensure canvas is properly sized
+                        centerCanvas()
+                      } catch (e) {
+                        console.warn("Error centering model:", e)
+                        // Fallback to default settings - ALWAYS ensure model is visible
+                        setDefaultCamera()
+                      }
+                    }
+
+                    // Center the canvas in shadowRoot
+                    const centerCanvas = () => {
+                      if (el.shadowRoot) {
+                        const containerDiv = el.shadowRoot.querySelector("div.container")
+                        if (containerDiv) {
+                          containerDiv.style.width = "100%"
+                          containerDiv.style.height = "100%"
+                          containerDiv.style.margin = "0"
+                          containerDiv.style.padding = "0"
+                          containerDiv.style.position = "absolute"
+                          containerDiv.style.top = "0"
+                          containerDiv.style.left = "0"
+                          containerDiv.style.right = "0"
+                          containerDiv.style.bottom = "0"
+                        }
+
+                        const canvas = el.shadowRoot.querySelector("canvas")
+                        if (canvas) {
+                          canvas.style.width = "100%"
+                          canvas.style.height = "100%"
+                          canvas.style.display = "block"
+                          canvas.style.margin = "0"
+                          canvas.style.padding = "0"
+                        }
+
+                        // Also handle slot canvas if it exists
+                        const slotCanvas = el.shadowRoot.querySelector("slot canvas") || 
+                                         el.shadowRoot.querySelector("canvas")
+                        if (slotCanvas) {
+                          slotCanvas.style.width = "100%"
+                          slotCanvas.style.height = "100%"
+                          slotCanvas.style.display = "block"
+                          slotCanvas.style.margin = "0"
+                        }
+                      }
+                    }
+
+                    // Initialize canvas centering immediately
+                    centerCanvas()
+
+                    // Wait for model to load, then center and frame
+                    const handleModelLoad = () => {
+                      setTimeout(() => {
+                        // Always ensure default camera first
+                        setDefaultCamera()
+                        centerCanvas()
+                        // Then try to center and frame
+                        centerAndFrameModel()
+                      }, 100)
+                    }
+
+                    // Set default camera immediately and on load
+                    if (el.loaded) {
+                      setDefaultCamera()
+                      handleModelLoad()
+                    } else {
+                      el.addEventListener("load", () => {
+                        setDefaultCamera()
+                        handleModelLoad()
+                      }, { once: true })
+                    }
+
+                    // Also try after delays to ensure it works - always set default first
+                    setTimeout(() => {
+                      setDefaultCamera()
+                      handleModelLoad()
+                    }, 200)
+                    setTimeout(() => {
+                      setDefaultCamera()
+                      handleModelLoad()
+                    }, 500)
+                    setTimeout(() => {
+                      setDefaultCamera()
+                      handleModelLoad()
+                    }, 1000)
+                  }
+                }}
+                src={selectedProduct.model}
+                alt={selectedProduct.title}
+                interaction-prompt="none"
+                shadow-intensity="1"
+                loading="eager"
+                camera-controls
+                camera-orbit={selectedProduct.cameraOrbit || "0deg 70deg 120%"}
+                camera-target="0m 0m 0m"
+                field-of-view={selectedProduct.fieldOfView || "30deg"}
+                min-field-of-view="20deg"
+                max-field-of-view="60deg"
+                bounds="tight"
+                ar-modes="webxr scene-viewer quick-look"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "block",
+                  margin: 0,
+                  padding: 0,
+                  pointerEvents: "auto",
+                  opacity: 1,
+                  visibility: "visible",
+                }}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   )
 }
